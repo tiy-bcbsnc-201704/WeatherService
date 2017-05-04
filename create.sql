@@ -55,7 +55,7 @@ create table WeatherDataService
   CreationDateTime DATETIME  
 )
 
-CREATE TABLE ServiceEvent (
+CREATE TABLE ServiceEvents (
 EventId INT PRIMARY KEY IDENTITY (1,1) NOT NULL,
 ServiceName NVARCHAR(100) NOT NULL,
 EventDescription NVARCHAR(200) NOT NULL,
