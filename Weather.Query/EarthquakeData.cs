@@ -1,57 +1,58 @@
 ﻿using Dapper.Contrib.Extensions;
 using System;
+using Weather.EarthquakeDataService;
 
 namespace Weather.Query
 {
     [Table("Earthquake")]
-    public class EarthquakeData
+    public class EarthquakeData : IRumble
     {
         [Key]
-        public int id { get; set; }
+        public int EarthquakeId { get; set; }
 
-        public DateTime Etime { get; set; }
+        public DateTime EventTime { get; set; }
 
-        public decimal EElatitude { get; set; }
+        public decimal Latitude { get; set; }
 
-        public decimal Elongitude { get; set; }
+        public decimal Longitude { get; set; }
 
-        public decimal Edepth { get; set; }
+        public decimal Depth { get; set; }
 
-        public decimal Emag { get; set; }
+        public decimal Magnitude { get; set; }
 
-        public string EmagType { get; set; }
+        public string MagnitudeType { get; set; }
 
-        public int Enst { get; set; }
+        public int SeismicStations { get; set; }
 
-        public decimal Egap { get; set; }
+        public decimal AzimuthalGap { get; set; }
 
-        public decimal Edmin { get; set; }
+        public decimal EpiCenterDistance { get; set; }
 
-        public decimal Erms { get; set; }
+        public decimal RootMeanSquare { get; set; }
 
-        public string Enet { get; set; }
+        public string DataContributorId { get; set; }
 
-        public string Eid { get; set; }
+        public string NetworkIdentifier { get; set; }
 
-        public DateTime Eupdated { get; set; }
+        public DateTime RecentUpdateTime { get; set; }
 
-        public string Eplace { get; set; }
+        public string GeographicRegion { get; set; }
 
-        public string Etype { get; set; }
+        public string SeismicEventType { get; set; }
 
-        public decimal EhorizontalError { get; set; }
+        public decimal HorizontalError { get; set; }
 
-        public decimal EdepthError { get; set; }
+        public decimal DepthError { get; set; }
 
-        public decimal EmagError { get; set; }
+        public decimal MagnitudeError { get; set; }
 
-        public int EmagNst { get; set; }
+        public int MagniteOfEarthquake { get; set; }
 
-        public string Estatus { get; set; }
+        public string EventsReviewed { get; set; }
 
-        public string ElocationSource { get; set; }
+        public string LocationSource { get; set; }
 
-        public string EmagSource { get; set; }
+        public string MagnitudeSource { get; set; }
 
     }
 }

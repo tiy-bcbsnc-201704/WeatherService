@@ -3,9 +3,9 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.IO;
 using System.Net;
 using System.Threading;
+using Weather.EventNotifier;
 
 namespace Weather.SolarWindDataService
 {
@@ -17,7 +17,6 @@ namespace Weather.SolarWindDataService
             // Download the file into a string
             while (true)
             {
-                Thread.Sleep(60000); // 60 seconds
                 using (WebClient webClient = new WebClient())
                 {
                     //webClient.DownloadFile("http://services.swpc.noaa.gov/products/solar-wind/mag-5-minute.json", @"C:\Users\u872059\Downloads\SolarWind.json");
@@ -59,12 +58,26 @@ namespace Weather.SolarWindDataService
                             solarWind.Latitude = Convert.ToDecimal(windData[5].ToString());
                             solarWind.Temperature = Convert.ToDecimal(windData[6].ToString());
 
-                            connection.Insert(solarWind);
+                            try
+                            {
+                                connection.Insert(solarWind);
+                            }
+                            catch (SqlException sqlEx)
+                            {
+                                if (sqlEx.Message.StartsWith("Violation of UNIQUE KEY constraint"))
+                                {
+                                    continue;
+                                }
+                            }
                         }
                     }
-                }
 
-                // Call the EventNotifier service to record the time the file was downloaded
+                    // Call the EventNotifier service to record the time the file was downloaded
+                    EventNotifier.EventHandler eh = new EventNotifier.EventHandler("PLEASE PUT YOUR CONNECTION STRING HERE!");
+                    eh.Record(ServiceName.SolarWindService, "SolarWind table update");
+                    
+                    Thread.Sleep(6000); // 60000 = 60 seconds
+                }
             }
         }
     }
