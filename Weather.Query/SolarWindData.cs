@@ -1,10 +1,11 @@
 ﻿using Dapper.Contrib.Extensions;
 using System;
+using Weather.SolarWindDataService;
 
 namespace Weather.Query
 {
     [Table("SolarWind")]
-    public class SolarWindData
+    public class SolarWindData :IBlow
     {
         [Key]
         public int SolarWindId { get; set; }

@@ -1,5 +1,4 @@
 ﻿using Dapper;
-using Dapper.Contrib.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -11,6 +10,10 @@ namespace Weather.Query
        public IHaveConditions Query(DateTime when, double latitude, double longitude)
         {
             string connectionString = "Server=localhost;Database=WeatherService;Integrated Security=True";
+            ConditionReport conditionreport = new ConditionReport();
+            conditionreport.When = when;
+            conditionreport.Latitude = latitude;
+            conditionreport.Longitude = longitude;
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -21,6 +24,7 @@ namespace Weather.Query
                     "Where Id = @when " +
                     "and Latitude = @latitude " +
                     "and Longitude = @longitude");
+                conditionreport.SolarWind = solar;
 
                 WeatherData weatherData = new WeatherData();
                 IEnumerable<WeatherData> weather = connection.Query<WeatherData>(
@@ -29,7 +33,18 @@ namespace Weather.Query
                     "Where Id = @when " +
                     "and Latitude = @latitude " +
                     "and Longitude = @longitude");
+                conditionreport.Weather = weather;
+
+                EarthquakeData earthQuakeDate = new EarthquakeData();
+                IEnumerable<EarthquakeData> earthQuake = connection.Query<EarthquakeData>(
+                    "SELECT *" +
+                    "FROM WeatherDataService " +
+                    "Where Id = @when " +
+                    "and Latitude = @latitude " +
+                    "and Longitude = @longitude");
+                conditionreport.Earthquakes = earthQuake;
             }
+            return conditionreport;
         }
     }
 }

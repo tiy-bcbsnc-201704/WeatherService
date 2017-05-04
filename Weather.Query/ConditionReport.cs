@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Weather.EarthquakeDataService;
 using Weather.SolarWindDataService;
 using Weather.WeatherDataService;
 
