@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Threading;
+using System.Configuration;
 
 namespace Weather.EarthquakeDataService
 {
     class Program
     {
-        public static object TemporaryCityTool { get; private set; }
+
 
         static void Main(string[] args)
         {
+            string connectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["WeatherService"].ConnectionString;
+
             for (;;)
             {
                 RunEarthQuake runEarthQuake = new RunEarthQuake();
-                runEarthQuake.DoStuff();
+                runEarthQuake.DoStuff(connectionString);
                 Console.WriteLine("waiting 5 minutes...");
                 Thread.Sleep(1000 * 60 * 1);
                 Console.WriteLine("wait Time-End");
@@ -23,6 +27,8 @@ namespace Weather.EarthquakeDataService
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }
 

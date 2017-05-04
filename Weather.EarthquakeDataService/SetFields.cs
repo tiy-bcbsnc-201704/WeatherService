@@ -8,12 +8,8 @@ namespace Weather.EarthquakeDataService
 {
     public class SetFields
     {
-        private SetFields(string[] parts)
+        public Earthquake SetField(string[] parts)
         {
-        }
-        private void SetField()
-        {
-
             Earthquake earthquake = new Earthquake();
             earthquake.EventTime = Convert.ToDateTime(parts[0]);
             earthquake.Latitude = SetDefaultDecimal(parts[1]);
@@ -63,6 +59,5 @@ namespace Weather.EarthquakeDataService
             return SetInt;
         }
 
-        string[] _part;
     }
 }

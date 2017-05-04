@@ -5,7 +5,7 @@ namespace Weather.EarthquakeDataService
 {
     public class InsertEarthQuack
     {
-        internal void InsertEarthQuackM(Earthquake earthquake)
+        public void InsertEarthQuackM(Earthquake earthquake)
         {
             Earthquake _earthquakeInt = earthquake;
             string connectionstring = "Server=localhost;Database=WeatherService;Integrated Security=True";
