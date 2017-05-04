@@ -7,10 +7,10 @@ namespace Weather.EarthquakeDataService
 {
     internal class RunEarthQuake
     {
-        public RunEarthQuake()
-        {
+        //public RunEarthQuake()
+        //{
 
-        }
+        //}
 
         public void DoStuff(string connectionString)
         {
