@@ -15,11 +15,15 @@ namespace Weather.Query
             conditionreport.Latitude = latitude;
             conditionreport.Longitude = longitude;
 
+            object sqlParm1 = new { whenIn = when };
+            object sqlParm2 = new { latitudeIn = latitude };
+            object sqlParm3 = new { longitudeIn = longitude };
+            
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SolarWindData solarWind = new SolarWindData();
-                IEnumerable<SolarWindData> solar = connection.Query<SolarWindData>(
-                    @"SELECT SolarWindId  
+                IEnumerable<SolarWindData> solar = connection.Query<SolarWindData>($@"
+                     SELECT SolarWindId  
                           , MeasurementDateTime
                           , XCoordinate 
                           , YCoordinate
@@ -28,14 +32,15 @@ namespace Weather.Query
                           , Latitude
                           , Temperature
                        FROM SolarWindData 
-                      WHERE MeasurementDateTime = @when  
-                        AND Latitude = @latitude  
-                        AND Longitude = @longitude");
+                      WHERE MeasurementDateTime = @when, {sqlParm1}    
+                        AND Latitude = @latitude, {sqlParm2}    
+                        AND Longitude = @longitude, {sqlParm3}");
+
                 conditionreport.SolarWind = solar;
 
                 WeatherData weatherData = new WeatherData();
-                IEnumerable<WeatherData> weather = connection.Query<WeatherData>(
-                   @"SELECT   Id
+                IEnumerable<WeatherData> weather = connection.Query<WeatherData>($@"
+                     SELECT   Id
                             , StationId
                             , Location
                             , Latitude
@@ -46,14 +51,15 @@ namespace Weather.Query
                             , Humidity
                             , CreationDateTime
                        FROM WeatherDataService  
-                      WHERE ObservationTime = @when  
-                        AND Latitude = @latitude 
-                        AND Longitude = @longitude");
+                      WHERE ObservationTime = @when,      {sqlParm1}  
+                        AND Latitude        = @latitude,  {sqlParm2} 
+                        AND Longitude       = @longitude, {sqlParm3}");
+
                 conditionreport.Weather = weather;
 
                 EarthquakeData earthQuakeDate = new EarthquakeData();
-                IEnumerable<EarthquakeData> earthQuake = connection.Query<EarthquakeData>(
-                    @"SELECT  Id
+                IEnumerable<EarthquakeData> earthQuake = connection.Query<EarthquakeData>($@"
+                      SELECT  EarthquakeId
                             , EventTime
                             , Latitude
                             , Longitude
@@ -77,9 +83,10 @@ namespace Weather.Query
                             , LocationSource
                             , MagnitudeSource
                         FROM WeatherDataService 
-                       WHERE EventTime = @when  
-                         AND Latitude  = @latitude 
-                         AND Longitude = @longitude");
+                       WHERE EventTime = @when,      {sqlParm1}  
+                         AND Latitude  = @latitude,  {sqlParm2} 
+                         AND Longitude = @longitude, {sqlParm3}");
+
                 conditionreport.Earthquakes = earthQuake;
             }
             return conditionreport;
