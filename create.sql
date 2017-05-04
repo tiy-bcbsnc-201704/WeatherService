@@ -1,11 +1,4 @@
-﻿USE master
-
-IF EXISTS(SELECT * FROM sys.databases WHERE name = 'WeatherService')
-	DROP DATABASE WeatherService
-GO
-
-CREATE DATABASE WeatherService
-GO
+﻿
 
 USE WeatherService
 

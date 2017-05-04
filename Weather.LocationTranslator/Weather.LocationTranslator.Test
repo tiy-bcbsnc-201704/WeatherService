@@ -1,0 +1,43 @@
+﻿using System;
+
+using NUnit.Framework;
+using NSubstitute;
+
+
+namespace Weather.LocationTranslator
+{
+
+
+    public class LocationTranslatorTests
+    {
+	        private double inputLongitude;
+	        private double inputLatitude;
+	        private string outputState;
+
+	
+        [Test]
+        public void Test01()
+        {
+            //  Arrange and Act
+
+           inputLongitude = 52.00;
+           inputLatitude = 52.00;
+
+            StateForLongLat(inputLongitude, inputLatitude);
+
+
+            //  Assert
+
+            xInput.Received(1).GetNumber();
+            xContact.DidNotReceive().GetAllContacts();
+            xRecipe.DidNotReceive().GetAllRecipes();
+            //xContact.DidNotReceive().CreateCompany(Arg.Any<string>(), Arg.Any<string>());
+            xContact.DidNotReceiveWithAnyArgs().CreateCompany(null, null);
+
+        }
+
+
+    }
+
+	
+}
