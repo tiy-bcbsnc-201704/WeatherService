@@ -14,11 +14,14 @@ namespace Weather.SolarWindDataService
     {
         static void Main(string[] args)
         {
+            string connectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["SolarWindDataServices"].ConnectionString;
 
             while (true)
             {
                 using (WebClient webClient = new WebClient())
                 {
+
                     // Download the file into a string
                     string solarWindData = webClient.DownloadString("http://services.swpc.noaa.gov/products/solar-wind/mag-5-minute.json");
 
@@ -31,10 +34,7 @@ namespace Weather.SolarWindDataService
                     {
                         // Create list that contains all fields in a row
                         List<object> windData = new List<object>(solarWindDataArray[i]);
-
-                        string connectionString;
-                        connectionString = ConfigurationManager.ConnectionStrings["SolarWindDataServices"].ConnectionString; 
-                           
+                          
                         using (SqlConnection connection = new SqlConnection(connectionString))
                         {
                             SolarWind solarWind = new SolarWind();
@@ -62,7 +62,7 @@ namespace Weather.SolarWindDataService
                     }
 
                     // Call the EventNotifier service to record the time the file was downloaded
-                    EventNotifier.EventHandler eh = new EventNotifier.EventHandler();
+                    EventNotifier.EventHandler eh = new EventNotifier.EventHandler(connectionString);
                     eh.Record(ServiceName.SolarWindService, "SolarWind table update");
 
                     Thread.Sleep(6000); // 60000 = 60 seconds
