@@ -41,7 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConditionsRepository.cs" />
+    <Compile Include="EarthquakeData.cs" />
+    <Compile Include="IHaveConditions.cs" />
+    <Compile Include="IProvideConditions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SolarWindData.cs" />
+    <Compile Include="WeatherData.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Weather.EarthquakeDataService\Weather.EarthquakeDataService.csproj">
@@ -60,6 +66,9 @@
       <Project>{c2713c4b-76fa-45fe-93a3-0a96191fe06e}</Project>
       <Name>Weather.WeatherDataService</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
