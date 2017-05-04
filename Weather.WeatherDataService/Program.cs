@@ -28,9 +28,11 @@ namespace Weather.WeatherDataService
                 Console.ReadLine();
 
 
-
-                //ZipFile.ExtractToDirectory("WeatherData.zip", "WeatherUnzipped.txt");
+                Console.WriteLine("Unzipping file");
+                ZipFile.ExtractToDirectory("WeatherData.zip", "C:/Users/u847301/Source/Repos/WeatherService/Weather.WeatherDataService/bin/Debug");
+                Console.WriteLine("Please press ENTER to continue.");
             }
+
 
 
         }
