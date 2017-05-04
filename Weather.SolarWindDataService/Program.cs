@@ -1,10 +1,12 @@
 ﻿using Dapper.Contrib.Extensions;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.IO;
 using System.Net;
+using System.Threading;
+using Weather.EventNotifier;
 
 namespace Weather.SolarWindDataService
 {
@@ -12,80 +14,76 @@ namespace Weather.SolarWindDataService
     {
         static void Main(string[] args)
         {
+            string connectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["SolarWindDataServices"].ConnectionString;
 
-            // Download the file into a string
-            using (WebClient webClient = new WebClient())
+            while (true)
             {
-                //webClient.DownloadFile("http://services.swpc.noaa.gov/products/solar-wind/mag-5-minute.json", @"C:\Users\u872059\Downloads\SolarWind.json");
-                string SolarWindData = webClient.DownloadString("http://services.swpc.noaa.gov/products/solar-wind/mag-5-minute.json");
-                Console.WriteLine(SolarWindData);
-
-                // Parse the JSON file data
-                JArray a = JArray.Parse(SolarWindData);
-                //Console.WriteLine(a[0]);
-                Console.WriteLine(a[1]);
-                Console.WriteLine(a[2]);
-
-                // Call the EventNotifier service to record the time the file was downloaded
-
-
-                // Connect to the database
-                string connectionString = "Server=LOCALHOST;Database=WeatherService;Trusted_Connection=True";
-                using (SqlConnection connection = new SqlConnection(connectionString))
+                using (WebClient webClient = new WebClient())
                 {
-                    SolarWindDapper solarWind = new SolarWindDapper();
-                    connection.Insert(new SolarWindDapper
+
+                    // Download the file into a string
+                    string solarWindData = webClient.DownloadString("http://services.swpc.noaa.gov/products/solar-wind/mag-5-minute.json");
+
+                    // Parse the JSON file data in an array
+                    JArray solarWindDataArray = JArray.Parse(solarWindData);
+
+                    // We know there are only 2 array downloaded at any time
+                    // the "zeroith" row contians the row headers - we  do not need this row 
+                    for (int i = 1; i < 3; i += 1)
                     {
-                        MeasurementDateTime = solarWind.MeasurementDateTime,
-                        XCoordinate = solarWind.XCoordinate,
-                        YCoordinate = solarWind.YCoordinate,
-                        ZCoordinate = solarWind.ZCoordinate,
-                        Longitude = solarWind.Longitude,
-                        Latitude = solarWind.Latitude,
-                        Temperature = solarWind.Temperature
-                    });
-                    //IEnumerable<SolarWindDapper> solarWinds = connection.GetAll<SolarWindDapper>();
+                        // Create list that contains all fields in a row
+                        List<object> windData = new List<object>(solarWindDataArray[i]);
+                          
+                        using (SqlConnection connection = new SqlConnection(connectionString))
+                        {
+                            SolarWind solarWind = new SolarWind();
+                            // Set database varibles equal to data downloaded (and converted)
+                            solarWind.MeasurementDateTime = Convert.ToDateTime(windData[0].ToString());
+                            solarWind.XCoordinate = Convert.ToDecimal(windData[1].ToString());
+                            solarWind.YCoordinate = Convert.ToDecimal(windData[2].ToString());
+                            solarWind.ZCoordinate = Convert.ToDecimal(windData[3].ToString());
+                            solarWind.Longitude = Convert.ToDecimal(windData[4].ToString());
+                            solarWind.Latitude = Convert.ToDecimal(windData[5].ToString());
+                            solarWind.Temperature = Convert.ToDecimal(windData[6].ToString());
 
+                            try
+                            {
+                                connection.Insert(solarWind);
+                            }
+                            catch (SqlException sqlEx)
+                            {
+                                if (sqlEx.Message.StartsWith("Violation of UNIQUE KEY constraint"))
+                                {
+                                    continue;
+                                }
+                                throw;
+                            }
+                        }
+                    }
 
-                    //foreach (SolarWindDapper rowOfData in solarWinds)
-                    //{
-                    //    Console.WriteLine($"{(DateTime)rowOfData.MeasurementDateTime} {(decimal)rowOfData.XCoordinate}");
-                    //}
-                    
+                    // Call the EventNotifier service to record the time the file was downloaded
+                    EventNotifier.EventHandler eh = new EventNotifier.EventHandler(connectionString);
+                    eh.Record(ServiceName.SolarWindService, "SolarWind table successfully updated");
 
-
-
-
-
-
-
-
-
-
-
-                    ////Open the file              
-                    //var stream = File.OpenText(@"C:\Users\u872059\Downloads\SolarWind.json");
-                    ////Read the file              
-                    //string st = stream.ReadToEnd();
-                    //var jsonArray = JArray.Parse(st);
-
-                    ////List<Treatment> treatments = JsonConvert.DeserializeObject<List<Treatment>>(Server.MapPath("~/Content/treatments.json")); 
-
-
-                    //foreach (var item in jsonArray)
-                    //{
-                    //    JObject ob = new JObject(item);
-                    //    foreach (var t in ob.Values<string>())
-                    //    {
-                    //        JObject oo = new JObject(t);
-                    //        foreach (var x in oo)
-                    //        {
-                    //            Console.WriteLine("item");
-                    //        }
-                    //    }
-                    //}
+                    Thread.Sleep(60000); // 60000 = 60 seconds
                 }
             }
         }
     }
+    //webClient.DownloadFile("http://services.swpc.noaa.gov/products/solar-wind/mag-5-minute.json", @"C:\Users\u872059\Downloads\SolarWind.json");
+
+    //Console.WriteLine(a[0]);
+    //Console.WriteLine(solarWindDataArray[1]);
+    //Console.WriteLine(solarWindDataArray[2]);
+    //Console.WriteLine("------------------------------------");
+    //Console.WriteLine(windData[0]);
+    //Console.WriteLine(windData[1]);
+    //Console.WriteLine(windData[2]);
+    //Console.WriteLine(windData[3]);
+    //Console.WriteLine(windData[4]);
+    //Console.WriteLine(windData[5]);
+    //Console.WriteLine(windData[6]);
+    //Console.WriteLine("------------------------------------");
+    //Console.ReadLine();
 }

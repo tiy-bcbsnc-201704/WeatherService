@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using Weather.EarthquakeDataService;
 using Weather.SolarWindDataService;
 using Weather.WeatherDataService;
-using Weather.EarthquakeDataService;
 
 namespace Weather.Query
 {

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dapper.Contrib.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
@@ -12,12 +13,26 @@ namespace Weather.EarthquakeDataService
 {
     public class Program
     {
+        static decimal ParseOrZeroDecimal(string input)
+        {
+            decimal output = 0;
+            decimal.TryParse(input, out output);
+            return output;
+        }
+        static int ParseOrZeroInt(string input)
+        {
+            int output = 0;
+            int.TryParse(input, out output);
+            return output;
+        }
         static void Main(string[] args)
         {
 
             DateTimeStyles styles;
-            DateTime result;
+            //DateTime result;
             CultureInfo culture;
+            decimal defaultToZeroDecimal  = 0;
+            int defaultToZeroInt = 0;
             culture = CultureInfo.CreateSpecificCulture("en-US");
 
             string[] parts = null;
@@ -45,34 +60,43 @@ namespace Weather.EarthquakeDataService
                     while (!reader.EndOfStream)
                     {
                         string line = reader.ReadLine();
+
+                      //  line = line.Replace("\"", " ");
+                      //  string[] parts = string.Split(line [] { ",\"" }, StringSplitOptions.None);
+
                         parts = line.Split(',');
+
                         Console.WriteLine(string.Join("\t", parts));
                         Console.WriteLine($"EventTime{parts[0]}");
                         Console.ReadLine();
 
                         //Add records to DB
-                        // string dateString = "2017-05-03T19:37:33.190Z";
+ 
                         Earthquake earthquake = new Earthquake();
                         styles = DateTimeStyles.AssumeLocal;
-                         try
-                         {
-                            result = DateTime.Parse(parts[0], culture, styles);
-                            Console.WriteLine("{0} converted to {1} {2}.",
-                                              parts[0], result, result.Kind.ToString());
-                            earthquake.EventTime = DateTime.Parse(parts[0], culture, styles);
-                        }
-                         catch (FormatException)
-                         {
-                            Console.WriteLine("Unable to convert {0} to a date and time.", parts[0]);
-                         }
-
-                        earthquake.Latitude = Convert.ToDecimal(parts[1].ToString());
-                        earthquake.Longitude = Convert.ToDecimal(parts[2].ToString());
-                        earthquake.Depth = Convert.ToDecimal(parts[3].ToString());
-                        earthquake.Magnitude = Convert.ToDecimal(parts[4].ToString());
-
-
-                        // connection.Insert(earthquake);
+                        earthquake.EventTime = DateTime.Parse(parts[0], culture, styles);
+                        earthquake.Latitude = ParseOrZeroDecimal(parts[1]);
+                        earthquake.Longitude = ParseOrZeroDecimal(parts[2]);
+                        earthquake.Depth = ParseOrZeroDecimal(parts[3]);
+                        earthquake.Magnitude =  ParseOrZeroDecimal(parts[4]);                                        
+                        earthquake.MagnitudeType =  parts[5].ToString();
+                        earthquake.SeismicStations = ParseOrZeroInt(parts[6]);
+                        earthquake.AzimuthalGap = ParseOrZeroDecimal(parts[7]);
+                        earthquake.EpiCenterDistance = ParseOrZeroDecimal(parts[8]); ;
+                        earthquake.RootMeanSquare = ParseOrZeroDecimal(parts[9]);
+                        earthquake.DataContributorId =  parts[10].ToString();
+                        earthquake.NetworkIdentifier = parts[11].ToString();                
+                        earthquake.RecentUpdateTime = DateTime.Parse(parts[12], culture, styles);
+                        earthquake.GeographicRegion = parts[13].ToString().Trim();
+                        earthquake.SeismicEventType = parts[15].ToString();
+                        earthquake.HorizontalError = ParseOrZeroDecimal(parts[16]);
+                        earthquake.DepthError = ParseOrZeroDecimal(parts[17]);
+                        earthquake.MagnitudeError = ParseOrZeroDecimal(parts[18]);
+                        earthquake.MagniteOfEarthquake = ParseOrZeroInt(parts[19]);
+                        earthquake.EventsReviewed = parts[20].ToString();
+                        earthquake.LocationSource = parts[21].ToString();
+                        earthquake.MagnitudeSource = parts[22].ToString();
+                        connection.Insert(earthquake);
                     }
                 }
             }
