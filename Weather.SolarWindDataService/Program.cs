@@ -3,9 +3,9 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.IO;
 using System.Net;
 using System.Threading;
+using Weather.EventNotifier;
 
 namespace Weather.SolarWindDataService
 {
@@ -73,8 +73,10 @@ namespace Weather.SolarWindDataService
                     }
 
                     // Call the EventNotifier service to record the time the file was downloaded
-
-                    Thread.Sleep(60000); // 60 seconds
+                    EventNotifier.EventHandler eh = new EventNotifier.EventHandler();
+                    eh.Record(ServiceName.SolarWindService, "SolarWind table update");
+                    
+                    Thread.Sleep(6000); // 60000 = 60 seconds
                 }
             }
         }
