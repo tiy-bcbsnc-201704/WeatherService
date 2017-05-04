@@ -5,7 +5,7 @@ using Weather.EarthquakeDataService;
 namespace Weather.Query
 {
     [Table("Earthquake")]
-    public class EarthquakeData :IRumble
+    public class EarthquakeData : IRumble
     {
         [Key]
         public int EarthquakeId { get; set; }
