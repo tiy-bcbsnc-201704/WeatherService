@@ -8,7 +8,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Weather.WeatherDataService
+namespace Weather.EarthquakeDataService
 {
     public class Program
     {

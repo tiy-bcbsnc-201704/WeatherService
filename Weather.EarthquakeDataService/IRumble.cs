@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Weather.WeatherDataService
+namespace Weather.EarthquakeDataService
 {
     public interface IRumble
     {
