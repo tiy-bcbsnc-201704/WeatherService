@@ -22,7 +22,8 @@ namespace Weather.WeatherDataService
                 Webclient.Headers.Add("Upgrade-Insecure-Requests", "1");
                 Webclient.Headers.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3088.0 Safari/537.36");
                 Webclient.DownloadFile("http://w1.weather.gov/xml/current_obs/all_xml.zip", "WeatherData.zip");
-                
+
+
                 Console.WriteLine("Please press ENTER to continue.");
                 Console.ReadLine();
 
