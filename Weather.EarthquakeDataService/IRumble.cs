@@ -4,6 +4,7 @@ namespace Weather.EarthquakeDataService
 {
     public interface IRumble
     {
+        int EarthquakeId {get;}
         DateTime EventTime { get; }
         decimal Latitude { get; }
         decimal Longitude { get; }
