@@ -4,7 +4,7 @@ using System;
 namespace Weather.Query
 {
     [Table("SolarWind")]
-    class SolarWindData
+    public class SolarWindData
     {
         [Key]
         public int SolarWindId { get; set; }

@@ -4,7 +4,7 @@ using System;
 namespace Weather.Query
 {
     [Table("WeatherDataService")]
-    class WeatherData
+    public class WeatherData
     {
         [Key]
         public int id { get; set; }

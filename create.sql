@@ -54,3 +54,10 @@ create table WeatherDataService
   Humidity INT,
   CreationDateTime DATETIME  
 )
+
+CREATE TABLE ServiceEvent (
+EventId INT PRIMARY KEY IDENTITY (1,1) NOT NULL,
+ServiceName NVARCHAR(100) NOT NULL,
+EventDescription NVARCHAR(200) NOT NULL,
+EventDateTime DATETIME NOT NULL,
+)
