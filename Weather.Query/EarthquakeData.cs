@@ -8,7 +8,7 @@ namespace Weather.Query
     public class EarthquakeData :IRumble
     {
         [Key]
-        public int Id { get; set; }
+        public int EarthquakeId { get; set; }
 
         public DateTime EventTime { get; set; }
 
