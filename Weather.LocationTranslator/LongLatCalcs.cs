@@ -1,6 +1,5 @@
-﻿
+﻿using System;
 using System.Data.SqlClient;
-
 
 namespace Weather.LocationTranslator
 {
@@ -10,30 +9,32 @@ namespace Weather.LocationTranslator
         public string StateForLongLat(double longitude, double latitude)
         {
 
+
             string longLatState = "";
-            //longLatState = "AK";
-            //return longLatState;
+            double plusOrminus = 0;
+            // !
+            double incrplusOrminus = 0.1;  
+            double maxplusOrminus = 5.0; 
 
 
-            // determine longLatState
-            ///*
             while (true)
             {
-                double plusOrminus = 0;
-                double maxplusOrminus = 5.0;
 
-                longLatState = CheckCoords(longitude, latitude, plusOrminus);  // select count(*)
+                longLatState = CheckCoords(longitude, latitude, plusOrminus);
+                // Console.WriteLine($"Call: {longitude},{latitude},{plusOrminus} got {longLatState}");
 
-                if (longLatState != "") // any found)
+                if (longLatState != "ZZ")
                 {
                     return longLatState;
                 }
-                if (plusOrminus == maxplusOrminus)
+                if (plusOrminus >= maxplusOrminus)
                 {
                     return "XX";
                 }
-                plusOrminus += .10;
+                plusOrminus += incrplusOrminus;
             }
+
+
         }
 
 
@@ -61,19 +62,19 @@ namespace Weather.LocationTranslator
                     command.Parameters.AddWithValue("@plusorminus", plusorminus);
                     SqlDataReader reader = command.ExecuteReader();
 
-                    if (reader.FieldCount == 0)
+                    if (reader.HasRows == false)
                     {
-                        return "";
+                        return "ZZ";
                     }
-                    return reader[0].ToString();
 
+                    reader.Read();
+                    return reader.GetValue(0).ToString();
+                    
                 }
                 finally
                 {
-
                     connection.Close();
                     connection.Dispose();
-
                 }
             }
         }
