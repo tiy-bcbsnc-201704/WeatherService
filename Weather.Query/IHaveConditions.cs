@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Weather.SolarWindDataService;
 using Weather.WeatherDataService;
-using Weather.EarthquakeDataService;
 
 namespace Weather.Query
 {

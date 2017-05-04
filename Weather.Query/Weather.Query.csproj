@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConditionReport.cs" />
     <Compile Include="ConditionsRepository.cs" />
     <Compile Include="EarthquakeData.cs" />
     <Compile Include="IHaveConditions.cs" />
