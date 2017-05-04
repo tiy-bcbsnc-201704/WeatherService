@@ -11,8 +11,13 @@ namespace WeatherService_ServiceTests
 
             double inputLongitude;
             double inputLatitude;
-            string outputState;
-            LongLatCalcs function = new Weather.LocationTranslator.LongLatCalcs();
+
+            // string outputState;
+            StateCode outputState;
+
+            string connectionString = "Server=localhost;Database=WeatherService;Integrated Security=True";
+            LongLatCalcs function = new Weather.LocationTranslator.LongLatCalcs(connectionString);
+
 
 
             inputLongitude = 271.60;
