@@ -5,23 +5,22 @@ using Weather.EventNotifier;
 
 namespace Weather.EarthquakeDataService
 {
-    internal class RunEarthQuake
+    public class RunEarthQuake
     {
-        //public RunEarthQuake()
-        //{
-
-        //}
-
-        public void DoStuff(string connectionString)
+        public void DoStuff(string connectionString, string earthquackFileName)
         {
-            string _connectionString = connectionString;
             DownloadFile();
+
+            _connectionString   = connectionString;
+            _earthquackFileName = earthquackFileName;
+
             EventNotifier.EventHandler eh = new EventNotifier.EventHandler(_connectionString);
             eh.Record(ServiceName.EarthquakeService, "Earthquake table successfully updated");
+
             ReadEarthQuack();
         }
 
-        private void DownloadFile()
+        public void DownloadFile()
         {
             using (WebClient webClient = new WebClient())
             {
@@ -30,14 +29,9 @@ namespace Weather.EarthquakeDataService
             }
                 
         }
-        private void ReadEarthQuack()
+        public void ReadEarthQuack()
         {
-
-            filepath = @"C:\Users\u330542\Source\Repos\WeatherService\Weather.EarthquakeDataService\bin\Debug";
-            filename = "Earthquake.csv";
-            fullpath = Path.Combine(filepath, filename);
-
-             using (StreamReader reader = File.OpenText(fullpath))
+             using (StreamReader reader = File.OpenText(_earthquackFileName))
             {
                 while (!reader.EndOfStream)
                 {
@@ -48,14 +42,13 @@ namespace Weather.EarthquakeDataService
                         SetFields setFields = new SetFields();
                         Earthquake earthquake = setFields.SetField(parts);
                         InsertEarthQuack insertEarthQuack = new InsertEarthQuack();
-                        insertEarthQuack.InsertEarthQuackM(earthquake);
+                        insertEarthQuack.InsertEarthQuackM(earthquake,_connectionString);
                     }
                 }
             }
         }
-        string filename;
-        string filepath;
-        string fullpath;
         string[] parts;
+        string _connectionString;
+        string _earthquackFileName;
     }
 }

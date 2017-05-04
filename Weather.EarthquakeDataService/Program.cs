@@ -10,13 +10,14 @@ namespace Weather.EarthquakeDataService
 
         static void Main(string[] args)
         {
-            string connectionString;
-            connectionString = ConfigurationManager.ConnectionStrings["WeatherService"].ConnectionString;
+         
+            string connectionString = ConfigurationManager.ConnectionStrings["WeatherService"].ConnectionString;
+            string earthquackFileName = ConfigurationManager.AppSettings["EarthquackFileName"];
 
             for (;;)
             {
                 RunEarthQuake runEarthQuake = new RunEarthQuake();
-                runEarthQuake.DoStuff(connectionString);
+                runEarthQuake.DoStuff(connectionString, earthquackFileName);
                 Console.WriteLine("waiting 5 minutes...");
                 Thread.Sleep(1000 * 60 * 1);
                 Console.WriteLine("wait Time-End");
