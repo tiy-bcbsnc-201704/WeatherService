@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Earthquake.cs" />
+    <Compile Include="InsertEarthQuack.cs" />
     <Compile Include="IRumble.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
