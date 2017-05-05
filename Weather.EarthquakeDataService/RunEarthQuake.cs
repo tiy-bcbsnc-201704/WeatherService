@@ -2,6 +2,8 @@
 using System.IO;
 using System;
 using Weather.EventNotifier;
+using System.Data.SqlClient;
+using Dapper;
 
 namespace Weather.EarthquakeDataService
 {
@@ -9,28 +11,25 @@ namespace Weather.EarthquakeDataService
     {
         public void DoStuff(string connectionString, string earthquackFileName)
         {
-            //DownloadFile();
-
-            _connectionString   = connectionString;
+            _connectionString = connectionString;
             _earthquackFileName = earthquackFileName;
+            FileDownloadUrl();
             EventNotifier.EventHandler eh = new EventNotifier.EventHandler(_connectionString);
             eh.Record(ServiceName.EarthquakeService, "Earthquake table successfully updated");
-
             ReadEarthQuack();
+            Console.WriteLine("Database Update Completed with Downloaded File");
         }
 
-        //public void DownloadFile()
-        //{
-        //    using (WebClient webClient = new WebClient())
-        //    {
-        //        DateTime localdate = DateTime.Today;
-        //        webClient.DownloadFile("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.csv", "Earthquake.Dat");
-        //    }
-                
-        //}
+        public static void FileDownloadUrl()
+        {
+            string url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.csv";
+            int timeoutInMilliSec = 1000;
+            var success = FileDownloader.DownloadFile(url, fileFullPath, timeoutInMilliSec);
+        }
+
         public void ReadEarthQuack()
         {
-             using (StreamReader reader = File.OpenText(_earthquackFileName))
+             using (StreamReader reader = File.OpenText(fileFullPath))
             {
                 while (!reader.EndOfStream)
                 {
@@ -46,9 +45,12 @@ namespace Weather.EarthquakeDataService
                 }
             }
         }
+
         string[] parts;
         string _connectionString;
         string _earthquackFileName;
-
+        public static string desktoppath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        public static string filename = "Earthquake.csv";
+        public static string fileFullPath = Path.Combine(desktoppath, filename);
     }
 }

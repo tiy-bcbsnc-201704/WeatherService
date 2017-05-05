@@ -24,7 +24,7 @@ namespace Weather.EarthquakeDataService
             earthquake.DataContributorId = parts[10];
             earthquake.NetworkIdentifier = parts[11];
             earthquake.RecentUpdateTime = Convert.ToDateTime(parts[12]);
-            earthquake.GeographicRegion = ($"parts[13],',' parts[14]");
+            earthquake.GeographicRegion = ($"{parts[13]},{parts[14]}");
             earthquake.SeismicEventType = parts[15];
             earthquake.HorizontalError = SetDefaultDecimal(parts[16]);
             earthquake.DepthError = SetDefaultDecimal(parts[17]);
