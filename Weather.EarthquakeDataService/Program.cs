@@ -16,7 +16,7 @@ namespace Weather.EarthquakeDataService
                 RunEarthQuake runEarthQuake = new RunEarthQuake();
                 runEarthQuake.DoStuff(connectionString, earthquackFileName);
                 Console.WriteLine("This process runs for every 5 minutes ...");
-                Thread.Sleep(1000 * 60 * 1);
+                Thread.Sleep(1000 * 60 * 5);
                 Console.WriteLine("wait Time-End");
             }
         }

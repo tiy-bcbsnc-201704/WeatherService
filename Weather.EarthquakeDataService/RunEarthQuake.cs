@@ -13,10 +13,13 @@ namespace Weather.EarthquakeDataService
         {
             _connectionString = connectionString;
             _earthquackFileName = earthquackFileName;
+
             FileDownloadUrl();
+
             EventNotifier.EventHandler eh = new EventNotifier.EventHandler(_connectionString);
             eh.Record(ServiceName.EarthquakeService, "Earthquake table successfully updated");
             ReadEarthQuack();
+
             Console.WriteLine("Database Update Completed with Downloaded File");
         }
 
@@ -39,7 +42,6 @@ namespace Weather.EarthquakeDataService
                     {
                         SetFields setFields = new SetFields();
                         Earthquake earthquake = setFields.SetField(parts);
-
                         networkIdentifier = parts[11];
                         if (Count() == 0)
                         {
@@ -48,9 +50,8 @@ namespace Weather.EarthquakeDataService
                         }
                         else
                         {
-                            Console.WriteLine("Record Exists in DataBase & Skiping for process : " + networkIdentifier);
+                            Console.WriteLine("Record Exist in DataBase & Skiping for process : " + networkIdentifier);
                         }
-
                     }
                 }
             }
