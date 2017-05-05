@@ -47,8 +47,9 @@ namespace Weather.WeatherDataService
             Directory.CreateDirectory("xmls");
 
             string xmlFilePath = directorName + subDirectoryName;
+            Directory.Delete(xmlFilePath, true);
 
-            // unzip the file
+                // unzip the file
             ZipFile.ExtractToDirectory("WeatherData.zip", xmlFilePath);
 
             string[] fileNameIncludePath = Directory.GetFiles(xmlFilePath);
