@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Text;
 using System.Windows.Forms;
 using Weather.EventNotifier;
 
@@ -32,13 +33,19 @@ namespace WeatherService.Desktop
                 }
                 if (args.PropertyName == "TopLogs")
                 {
-                    _logViewer.Text = "";
+                    StringBuilder buffer = new StringBuilder();
+                    buffer.Append("<html><head><style>html, body { font-family: Verdana; font-size: 8.5pt; }</style></head><body>");
                     foreach (ServiceEvent e in _summary.TopLogs)
                     {
-                        _logViewer.Text += e.ServiceName + Environment.NewLine;
-                        _logViewer.Text += e.EventDescription + Environment.NewLine;
-                        _logViewer.Text += Environment.NewLine;
+                        buffer.Append($@"
+                            <p>
+                                <b>{e.ServiceName}</b><br>
+                                <i>{e.EventDateTime.ToShortDateString()} {e.EventDateTime.ToShortTimeString()}</i><br>
+                                <div>{e.EventDescription}</div>
+                            </p>");
                     }
+                    buffer.Append("</body></html>");
+                    _htmlLogViewer.DocumentText = buffer.ToString();
                 }
             });
         }

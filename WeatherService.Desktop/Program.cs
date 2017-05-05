@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Configuration;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WeatherService.Desktop
@@ -16,20 +14,7 @@ namespace WeatherService.Desktop
         {
             string connectionString = ConfigurationManager.ConnectionStrings["WeatherService"].ConnectionString;
             QueryFacade facade = new QueryFacade(connectionString);
-            WeatherDataSummary summary = new WeatherDataSummary();
-
-            Task summarizer = new Task(() =>
-            {
-                while (true)
-                {
-                    summary.EarthquakeCount = facade.GetEarthquakeCount();
-                    summary.SolarWindCount = facade.GetSolarWindCount();
-                    summary.WeatherCount = facade.GetWeatherCount();
-                    summary.TopLogs = facade.GetTopLogs();
-                    Thread.Sleep(1000);
-                }
-            });
-            summarizer.Start();
+            WeatherDataSummary summary = new WeatherDataSummary(facade);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
