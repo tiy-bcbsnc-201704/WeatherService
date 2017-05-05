@@ -8,6 +8,7 @@ using System.Linq;
 using System.Data.SqlClient;
 using Dapper.Contrib.Extensions;
 using System.Threading;
+using Weather.EventNotifier;
 
 namespace Weather.WeatherDataService
 {
@@ -15,6 +16,8 @@ namespace Weather.WeatherDataService
    {
       static void Main(string[] args)
       {
+         string connectionString = "Server=localhost;Database=WeatherService;Integrated Security=True";
+
          while (true)
          {
             //  download the zip file...
@@ -34,11 +37,15 @@ namespace Weather.WeatherDataService
                webClient.Headers.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3088.0 Safari/537.36");
                webClient.DownloadFile("http://w1.weather.gov/xml/current_obs/all_xml.zip", "WeatherData.zip");
                Console.WriteLine($"Finish downloading file, {today}");
-               Console.ReadLine();
+
             }
-           // create the subfolder.....?
-           // unzip the file
+            // create the subfolder.....?
+            // unzip the file
             Console.WriteLine("Start unzipping files");
+            string directorName = Directory.GetCurrentDirectory();
+            Console.WriteLine($"directory Name: { directorName}");
+            Directory.CreateDirectory("my_xml");
+
             string xmlFilePath = "C:/Users/u700656/Source/Repos/WeatherService/Weather.WeatherDataService/bin/Debug/XML";
             ZipFile.ExtractToDirectory("WeatherData.zip", xmlFilePath);
             Console.WriteLine("Finish unzipping file");
@@ -53,14 +60,23 @@ namespace Weather.WeatherDataService
             for (int i = 1; i < fileNameIncludePath.Length; i += 1)
             {
                Console.WriteLine($"File name is: {fileNameIncludePath[i]}");
-               Readxml(fileNameIncludePath[i]);
+               Readxml(fileNameIncludePath[i], connectionString);
             }
             // delete folder ?
+
+            // Call the EventNotifier service to record the time the file was downloaded
+            //    EventNotifier.EventHandler eh = new EventNotifier.EventHandler(connectionString);
+            //    eh.Record(ServiceName.WeatherService, "WeatherDataService table successfully updated");
+
             Thread.Sleep(30000); // 60000 = 60 seconds           
+
+            Console.WriteLine($"Hit Enter if you wish to refresh");
+            Console.ReadLine();
          }
+
       }
 
-      public static void Readxml(string filePath)
+      public static void Readxml(string filePath, string connectionString)
       {
          decimal latitudeValue = 0.00m;
          decimal longitudeValue = 0.00m;
@@ -78,6 +94,7 @@ namespace Weather.WeatherDataService
             content = reader.ReadToEnd();
          }
 
+         // reassign & to &amp so XML can be read
          using (StreamWriter writer = new StreamWriter(filePath))
          {
             writer.Write(content.Replace("& ", "&amp; "));
@@ -124,20 +141,14 @@ namespace Weather.WeatherDataService
                stationIDValue = station_id.Value;
 
             }
+
             foreach (XPathNavigator location in nav.Select("current_observation/location"))
             {
                locationValue = location.Value;
-               if (locationValue.Contains("&"))
-               {
-                  Console.WriteLine($"Bad location");
-                  break;
-               }
-               else
-               {
-                  Console.WriteLine($"location: {location.Value}");
-                  locationValue = location.Value;
-               }
+               Console.WriteLine($"location: {location.Value}");
+               locationValue = location.Value;
             }
+
             foreach (XPathNavigator observation_time_rfc822 in nav.Select("current_observation/observation_time_rfc822"))
             {
                CultureInfo provider = CultureInfo.InvariantCulture;
@@ -146,21 +157,24 @@ namespace Weather.WeatherDataService
                Console.WriteLine($"converted observation_time: {observationDateTime}");
 
             }
+
             foreach (XPathNavigator weather in nav.Select("current_observation/weather"))
             {
                Console.WriteLine($"weather: {weather.Value}");
                weatherConditionValue = weather.Value;
             }
+
             foreach (XPathNavigator temp_f in nav.Select("current_observation/temp_f"))
             {
                Console.WriteLine($"temp: {temp_f.ValueAsDouble}");
             }
+
             foreach (XPathNavigator relative_humidity in nav.Select("current_observation/relative_humidity"))
             {
                Console.WriteLine($"humidity: {relative_humidity.ValueAsInt}");
             }
+
             //  InsertIntoDatabase();
-            string connectionString = "Server=localhost;Database=WeatherService;Integrated Security=True";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                WeatherDataService WeatherDataService = new WeatherDataService();
@@ -175,7 +189,9 @@ namespace Weather.WeatherDataService
                WeatherDataService.CreationDateTime = today;
                connection.Insert(WeatherDataService);
             }
+
             break;
+
          }
       }
    }
