@@ -1,48 +1,35 @@
-﻿using System.Data.SqlClient;
-using System.Net;
+﻿using System.Net;
 using System.IO;
 using System;
-using Dapper.Contrib.Extensions;
 using Weather.EventNotifier;
+using System.Data.SqlClient;
+using Dapper;
 
 namespace Weather.EarthquakeDataService
 {
-    internal class RunEarthQuake
+    public class RunEarthQuake
     {
-        private readonly string _connectionString;
-
-        public RunEarthQuake(string connectionString)
+        public void DoStuff(string connectionString, string earthquackFileName)
         {
             _connectionString = connectionString;
-        }
-
-        public void DoStuff()
-        {
-            DownloadFile();
-
+            _earthquackFileName = earthquackFileName;
+            FileDownloadUrl();
             EventNotifier.EventHandler eh = new EventNotifier.EventHandler(_connectionString);
-            eh.Record(ServiceName.EarthquakeService, "SolarWind table successfully updated");
-            
+            eh.Record(ServiceName.EarthquakeService, "Earthquake table successfully updated");
             ReadEarthQuack();
+            Console.WriteLine("Database Update Completed with Downloaded File");
         }
 
-        private void DownloadFile()
+        public static void FileDownloadUrl()
         {
-            using (WebClient webClient = new WebClient())
-                {
-                    DateTime localdate = DateTime.Today;
-                    webClient.DownloadFile("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.csv", "Earthquake.Dat");
-                }
-                
+            string url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.csv";
+            int timeoutInMilliSec = 1000;
+            var success = FileDownloader.DownloadFile(url, fileFullPath, timeoutInMilliSec);
         }
-        private void ReadEarthQuack()
+
+        public void ReadEarthQuack()
         {
-
-            filepath = @"C:\Users\u330542\Source\Repos\WeatherService\Weather.EarthquakeDataService\bin\Debug";
-            filename = "Earthquake.csv";
-            fullpath = Path.Combine(filepath, filename);
-
-             using (StreamReader reader = File.OpenText(fullpath))
+             using (StreamReader reader = File.OpenText(fileFullPath))
             {
                 while (!reader.EndOfStream)
                 {
@@ -50,72 +37,20 @@ namespace Weather.EarthquakeDataService
                     parts = line.Split(',');
                     if (parts[0] != "time")
                     {
-                        //SetFields();
-
                         SetFields setFields = new SetFields();
-
                         Earthquake earthquake = setFields.SetField(parts);
-
-                        InsertEarthQuack insertEarthQuack = new InsertEarthQuack(_connectionString);
-                        insertEarthQuack.InsertEarthQuackM(earthquake);
+                        InsertEarthQuack insertEarthQuack = new InsertEarthQuack();
+                        insertEarthQuack.InsertEarthQuackM(earthquake,_connectionString);
                     }
                 }
             }
         }
 
-        //private Earthquake SetFields()
-        //{
-        //    Earthquake earthquake = new Earthquake();
-        //    earthquake.EventTime = Convert.ToDateTime(parts[0]);
-        //    earthquake.Latitude = SetDefaultDecimal(parts[1]);
-        //    earthquake.Longitude = SetDefaultDecimal(parts[2]);
-        //    earthquake.Depth = SetDefaultDecimal(parts[3]);
-        //    earthquake.Magnitude = SetDefaultDecimal(parts[4]);
-        //    earthquake.MagnitudeType = parts[5];
-        //    earthquake.SeismicStations = SetDefaultInt(parts[6]);
-        //    earthquake.AzimuthalGap = SetDefaultDecimal(parts[7]);
-        //    earthquake.EpiCenterDistance = SetDefaultDecimal(parts[8]);
-        //    earthquake.RootMeanSquare = SetDefaultDecimal(parts[9]);
-        //    earthquake.DataContributorId = parts[10];
-        //    earthquake.NetworkIdentifier = parts[11];
-        //    earthquake.RecentUpdateTime = Convert.ToDateTime(parts[12]);
-        //    earthquake.GeographicRegion = ($"parts[13],',' parts[14]");
-        //    earthquake.SeismicEventType = parts[15];
-        //    earthquake.HorizontalError = SetDefaultDecimal(parts[16]);
-        //    earthquake.DepthError = SetDefaultDecimal(parts[17]);
-        //    earthquake.MagnitudeError = SetDefaultDecimal(parts[18]);
-        //    earthquake.MagniteOfEarthquake = SetDefaultInt(parts[19]);
-        //    earthquake.EventsReviewed = parts[20];
-        //    earthquake.LocationSource = parts[21];
-        //    earthquake.MagnitudeSource = parts[22];
-        //    return earthquake;
-        //}
-        //private decimal SetDefaultDecimal(string parts)
-        //{
-        //    string _parts = parts;
-        //    decimal SetDecimal = 0;
-        //    if (!string.IsNullOrEmpty(_parts))
-        //    {
-        //        SetDecimal = Convert.ToDecimal(_parts);
-        //        return SetDecimal;
-        //    }
-        //    return SetDecimal;
-        //}
-        //private int SetDefaultInt(string parts)
-        //{
-        //    string _parts = parts;
-        //    int SetInt = 0;
-        //    if (!string.IsNullOrEmpty(_parts))
-        //    {
-        //        SetInt = Convert.ToInt32(_parts);
-        //        return SetInt;
-        //    }
-        //    return SetInt;
-        //}
-
-        string filename;
-        string filepath;
-        string fullpath;
         string[] parts;
+        string _connectionString;
+        string _earthquackFileName;
+        public static string desktoppath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        public static string filename = "Earthquake.csv";
+        public static string fileFullPath = Path.Combine(desktoppath, filename);
     }
 }
