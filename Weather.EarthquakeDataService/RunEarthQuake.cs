@@ -9,26 +9,25 @@ namespace Weather.EarthquakeDataService
     {
         public void DoStuff(string connectionString, string earthquackFileName)
         {
-            DownloadFile();
+            //DownloadFile();
 
             _connectionString   = connectionString;
             _earthquackFileName = earthquackFileName;
-
             EventNotifier.EventHandler eh = new EventNotifier.EventHandler(_connectionString);
             eh.Record(ServiceName.EarthquakeService, "Earthquake table successfully updated");
 
             ReadEarthQuack();
         }
 
-        public void DownloadFile()
-        {
-            using (WebClient webClient = new WebClient())
-            {
-                DateTime localdate = DateTime.Today;
-                webClient.DownloadFile("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.csv", "Earthquake.Dat");
-            }
+        //public void DownloadFile()
+        //{
+        //    using (WebClient webClient = new WebClient())
+        //    {
+        //        DateTime localdate = DateTime.Today;
+        //        webClient.DownloadFile("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.csv", "Earthquake.Dat");
+        //    }
                 
-        }
+        //}
         public void ReadEarthQuack()
         {
              using (StreamReader reader = File.OpenText(_earthquackFileName))
@@ -50,5 +49,6 @@ namespace Weather.EarthquakeDataService
         string[] parts;
         string _connectionString;
         string _earthquackFileName;
+
     }
 }
