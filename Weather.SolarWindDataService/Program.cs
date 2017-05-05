@@ -1,6 +1,7 @@
 ﻿using Dapper.Contrib.Extensions;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Configuration;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Net;
@@ -13,43 +14,31 @@ namespace Weather.SolarWindDataService
     {
         static void Main(string[] args)
         {
+            string connectionString;
+            connectionString = ConfigurationManager.ConnectionStrings["SolarWindDataServices"].ConnectionString;
 
-            // Download the file into a string
             while (true)
             {
                 using (WebClient webClient = new WebClient())
                 {
-                    //webClient.DownloadFile("http://services.swpc.noaa.gov/products/solar-wind/mag-5-minute.json", @"C:\Users\u872059\Downloads\SolarWind.json");
-                    string solarWindData = webClient.DownloadString("http://services.swpc.noaa.gov/products/solar-wind/mag-5-minute.json");
-                    //Console.WriteLine(solarWindData);
 
-                    // Parse the JSON file data
+                    // Download the file into a string
+                    string solarWindData = webClient.DownloadString("http://services.swpc.noaa.gov/products/solar-wind/mag-5-minute.json");
+
+                    // Parse the JSON file data in an array
                     JArray solarWindDataArray = JArray.Parse(solarWindData);
 
-                    //Console.WriteLine(a[0]);
-                    //Console.WriteLine(solarWindDataArray[1]);
-                    //Console.WriteLine(solarWindDataArray[2]);
-
+                    // We know there are only 2 array downloaded at any time
+                    // the "zeroith" row contians the row headers - we  do not need this row 
                     for (int i = 1; i < 3; i += 1)
                     {
+                        // Create list that contains all fields in a row
                         List<object> windData = new List<object>(solarWindDataArray[i]);
-
-                        //Console.WriteLine("------------------------------------");
-                        //Console.WriteLine(windData[0]);
-                        //Console.WriteLine(windData[1]);
-                        //Console.WriteLine(windData[2]);
-                        //Console.WriteLine(windData[3]);
-                        //Console.WriteLine(windData[4]);
-                        //Console.WriteLine(windData[5]);
-                        //Console.WriteLine(windData[6]);
-                        //Console.WriteLine("------------------------------------");
-                        //Console.ReadLine();
-
-                        string connectionString = "Server=LOCALHOST;Database=WeatherService;Trusted_Connection=True";
+                          
                         using (SqlConnection connection = new SqlConnection(connectionString))
                         {
                             SolarWind solarWind = new SolarWind();
-
+                            // Set database varibles equal to data downloaded (and converted)
                             solarWind.MeasurementDateTime = Convert.ToDateTime(windData[0].ToString());
                             solarWind.XCoordinate = Convert.ToDecimal(windData[1].ToString());
                             solarWind.YCoordinate = Convert.ToDecimal(windData[2].ToString());
@@ -68,17 +57,33 @@ namespace Weather.SolarWindDataService
                                 {
                                     continue;
                                 }
+                                throw;
                             }
                         }
                     }
 
                     // Call the EventNotifier service to record the time the file was downloaded
-                    EventNotifier.EventHandler eh = new EventNotifier.EventHandler("PLEASE PUT YOUR CONNECTION STRING HERE!");
-                    eh.Record(ServiceName.SolarWindService, "SolarWind table update");
-                    
-                    Thread.Sleep(6000); // 60000 = 60 seconds
+                    EventNotifier.EventHandler eh = new EventNotifier.EventHandler(connectionString);
+                    eh.Record(ServiceName.SolarWindService, "SolarWind table successfully updated");
+
+                    Thread.Sleep(60000); // 60000 = 60 seconds
                 }
             }
         }
     }
+    //webClient.DownloadFile("http://services.swpc.noaa.gov/products/solar-wind/mag-5-minute.json", @"C:\Users\u872059\Downloads\SolarWind.json");
+
+    //Console.WriteLine(a[0]);
+    //Console.WriteLine(solarWindDataArray[1]);
+    //Console.WriteLine(solarWindDataArray[2]);
+    //Console.WriteLine("------------------------------------");
+    //Console.WriteLine(windData[0]);
+    //Console.WriteLine(windData[1]);
+    //Console.WriteLine(windData[2]);
+    //Console.WriteLine(windData[3]);
+    //Console.WriteLine(windData[4]);
+    //Console.WriteLine(windData[5]);
+    //Console.WriteLine(windData[6]);
+    //Console.WriteLine("------------------------------------");
+    //Console.ReadLine();
 }
