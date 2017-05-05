@@ -20,6 +20,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SQL", "SQL", "{D2E3B4C2-11F
 		create.sql = create.sql
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherService-ServiceTests", "WeatherService-ServiceTests\WeatherService-ServiceTests.csproj", "{A9F384B2-9262-4EA9-BAA3-38AC37757753}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherService.Desktop", "WeatherService.Desktop\WeatherService.Desktop.csproj", "{FF7281FB-628F-4B48-813F-BCDE8CE8AB12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +54,14 @@ Global
 		{84F92421-B308-47F7-88D3-A29D52DCD82D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{84F92421-B308-47F7-88D3-A29D52DCD82D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{84F92421-B308-47F7-88D3-A29D52DCD82D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9F384B2-9262-4EA9-BAA3-38AC37757753}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9F384B2-9262-4EA9-BAA3-38AC37757753}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9F384B2-9262-4EA9-BAA3-38AC37757753}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9F384B2-9262-4EA9-BAA3-38AC37757753}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF7281FB-628F-4B48-813F-BCDE8CE8AB12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF7281FB-628F-4B48-813F-BCDE8CE8AB12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF7281FB-628F-4B48-813F-BCDE8CE8AB12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF7281FB-628F-4B48-813F-BCDE8CE8AB12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
