@@ -208,6 +208,7 @@
             // 
             // fetch
             // 
+            fetch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             fetch.Location = new System.Drawing.Point(346, 84);
             fetch.Name = "fetch";
             fetch.Size = new System.Drawing.Size(75, 23);

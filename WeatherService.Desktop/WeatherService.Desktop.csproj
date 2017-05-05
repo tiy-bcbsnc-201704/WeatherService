@@ -108,6 +108,10 @@
       <Project>{92DA0526-B542-4555-B035-FECFB54D2543}</Project>
       <Name>Weather.SolarWindDataService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Weather.WeatherDataService\Weather.WeatherDataService.csproj">
+      <Project>{C2713C4B-76FA-45FE-93A3-0A96191FE06E}</Project>
+      <Name>Weather.WeatherDataService</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

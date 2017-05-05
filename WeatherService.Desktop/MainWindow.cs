@@ -6,6 +6,7 @@ using Weather.EventNotifier;
 using Weather.LocationTranslator;
 using Weather.Query;
 using Weather.SolarWindDataService;
+using Weather.WeatherDataService;
 
 namespace WeatherService.Desktop
 {
@@ -95,6 +96,12 @@ namespace WeatherService.Desktop
             foreach (IBlow wind in conditions.SolarWind)
             {
                 buffer.Append($"<tr><td>{wind.Temperature}</td><td>{wind.XCoordinate}</td><td>{wind.YCoordinate}</td><td>{wind.ZCoordinate}</td></tr>");
+            }
+            buffer.Append("</tbody></table>");
+            buffer.Append("<h2>Weather</h2><table><thead><tr><th>Temp</th><th>Humidity</th><th>Location</th><th>Station Id</th></thead><tbody>");
+            foreach (IHaveWeather weather in conditions.Weather)
+            {
+                buffer.Append($"<tr><td>{weather.Temperature}</td><td>{weather.Humidity}</td><td>{weather.Location}</td><td>{weather.StationId}</td></tr>");
             }
             buffer.Append("</tbody></table>");
             buffer.Append("</body></html>");

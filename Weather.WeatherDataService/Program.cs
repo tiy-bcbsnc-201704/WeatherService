@@ -145,21 +145,25 @@ namespace Weather.WeatherDataService
                humidityValue = relative_humidity.ValueAsInt;
             }
 
+                try
+                {
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        WeatherDataService WeatherDataService = new WeatherDataService();
+                        WeatherDataService.StationID = stationIDValue;
+                        WeatherDataService.Location = locationValue;
+                        WeatherDataService.Latitude = latitudeValue;
+                        WeatherDataService.Longitude = longitudeValue;
+                        WeatherDataService.ObservationTime = observationDateTime;
+                        WeatherDataService.WeatherCondition = weatherConditionValue;
+                        WeatherDataService.Temperature = temperatureValue;
+                        WeatherDataService.Humidity = humidityValue;
+                        WeatherDataService.CreationDateTime = today;
+                        connection.Insert(WeatherDataService);
+                    }
+                }
+                catch (Exception) { }
             //  InsertIntoDatabase();
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-               WeatherDataService WeatherDataService = new WeatherDataService();
-               WeatherDataService.StationID = stationIDValue;
-               WeatherDataService.Location = locationValue;
-               WeatherDataService.Latitude = latitudeValue;
-               WeatherDataService.Longitude = longitudeValue;
-               WeatherDataService.ObservationTime = observationDateTime;
-               WeatherDataService.WeatherCondition = weatherConditionValue;
-               WeatherDataService.Temperature = temperatureValue;
-               WeatherDataService.Humidity = humidityValue;
-               WeatherDataService.CreationDateTime = today;
-               connection.Insert(WeatherDataService);
-            }
 
             break;
 
