@@ -7,17 +7,23 @@ namespace Weather.Query
 {
     public class ConditionsRepository : IProvideConditions
     {
-       public IHaveConditions Query(DateTime when, double latitude, double longitude)
+        private readonly string _connectionString;
+
+        public ConditionsRepository(string connectionString)
         {
-            string connectionString = "Server=localhost;Database=WeatherService;Integrated Security=True";
+            _connectionString = connectionString;
+        }
+
+        public IHaveConditions Query(DateTime when, double latitude, double longitude)
+        {
             ConditionReport conditionreport = new ConditionReport();
             conditionreport.When = when;
             conditionreport.Latitude = latitude;
             conditionreport.Longitude = longitude;
 
             object sqlParameters = new { WhenParameter = when, LatitudeParameter = latitude, LongitudeParameter = longitude };
-            
-            using (SqlConnection connection = new SqlConnection(connectionString))
+            object utcParameters = new { WhenParameter = when.ToUniversalTime(), LatitudeParameter = latitude, LongitudeParameter = longitude };
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 SolarWindData solarWind = new SolarWindData();
                 IEnumerable<SolarWindData> solar = connection.Query<SolarWindData>(@"
@@ -29,8 +35,8 @@ namespace Weather.Query
                           , Longitude
                           , Latitude
                           , Temperature
-                       FROM SolarWindData 
-                      WHERE ABS(DATEDIFF('n', MeasurementDateTime, @WhenParameter)) <=5", sqlParameters);
+                       FROM SolarWind
+                      WHERE ABS(DATEDIFF(n, MeasurementDateTime, @WhenParameter)) <=5", utcParameters);
 
                 conditionreport.SolarWind = solar;
 
@@ -47,9 +53,9 @@ namespace Weather.Query
                             , Humidity
                             , CreationDateTime
                        FROM WeatherDataService  
-                      WHERE ABS(DATEDIFF('n', MeasurementDateTime, @WhenParameter)) <=5
+                      WHERE ABS(DATEDIFF(n, CreationDateTime, @WhenParameter)) <=5
                         AND (SQUARE(Latitude - @LatitudeParameter)  +
-                             SQUARE(Longitude -@LongitudeParameter)) <= 1", sqlParameters);
+                             SQUARE(Longitude - @LongitudeParameter)) <= 1", sqlParameters);
 
 
                 conditionreport.Weather = weather;
@@ -80,10 +86,10 @@ namespace Weather.Query
                             , EventsReviewed
                             , LocationSource
                             , MagnitudeSource
-                        FROM WeatherDataService 
-                       WHERE ABS(DATEDIFF('n', MeasurementDateTime, @WhenParameter)) <=5  
+                        FROM Earthquake 
+                       WHERE ABS(DATEDIFF(n, EventTime, @WhenParameter)) <=5  
                          AND (SQUARE(Latitude - @LatitudeParameter)  +
-                             SQUARE(Longitude -@LongitudeParameter)) <= 1", sqlParameters);
+                             SQUARE(Longitude - @LongitudeParameter)) <= 1", sqlParameters);
 
                 conditionreport.Earthquakes = earthQuake;
             }

@@ -92,6 +92,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Weather.EarthquakeDataService\Weather.EarthquakeDataService.csproj">
+      <Project>{84F92421-B308-47F7-88D3-A29D52DCD82D}</Project>
+      <Name>Weather.EarthquakeDataService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Weather.EventNotifier\Weather.EventNotifier.csproj">
       <Project>{3DBB113A-9124-4F92-91D1-3F0245ABCAB0}</Project>
       <Name>Weather.EventNotifier</Name>
@@ -99,6 +103,18 @@
     <ProjectReference Include="..\Weather.LocationTranslator\Weather.LocationTranslator.csproj">
       <Project>{538E8023-AF49-4E4F-8DF5-1D42D833DAA4}</Project>
       <Name>Weather.LocationTranslator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Weather.Query\Weather.Query.csproj">
+      <Project>{D3A2828A-5B9E-4E2C-870B-BA00DE756B5B}</Project>
+      <Name>Weather.Query</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Weather.SolarWindDataService\Weather.SolarWindDataService.csproj">
+      <Project>{92DA0526-B542-4555-B035-FECFB54D2543}</Project>
+      <Name>Weather.SolarWindDataService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Weather.WeatherDataService\Weather.WeatherDataService.csproj">
+      <Project>{C2713C4B-76FA-45FE-93A3-0A96191FE06E}</Project>
+      <Name>Weather.WeatherDataService</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
