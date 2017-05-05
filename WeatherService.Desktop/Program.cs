@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Configuration;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using Weather.LocationTranslator;
 
 namespace WeatherService.Desktop
 {
@@ -16,24 +15,12 @@ namespace WeatherService.Desktop
         {
             string connectionString = ConfigurationManager.ConnectionStrings["WeatherService"].ConnectionString;
             QueryFacade facade = new QueryFacade(connectionString);
-            WeatherDataSummary summary = new WeatherDataSummary();
-
-            Task summarizer = new Task(() =>
-            {
-                while (true)
-                {
-                    summary.EarthquakeCount = facade.GetEarthquakeCount();
-                    summary.SolarWindCount = facade.GetSolarWindCount();
-                    summary.WeatherCount = facade.GetWeatherCount();
-                    summary.TopLogs = facade.GetTopLogs();
-                    Thread.Sleep(1000);
-                }
-            });
-            summarizer.Start();
+            WeatherDataSummary summary = new WeatherDataSummary(facade);
+            LongLatCalcs translator = new LongLatCalcs(connectionString);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow(summary));
+            Application.Run(new MainWindow(summary, translator));
         }
     }
 }

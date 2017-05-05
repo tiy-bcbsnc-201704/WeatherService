@@ -1,18 +1,38 @@
-﻿using System;
+using System;
 using System.ComponentModel;
+using System.Text;
 using System.Windows.Forms;
 using Weather.EventNotifier;
+using Weather.LocationTranslator;
 
 namespace WeatherService.Desktop
 {
     public partial class MainWindow : Form
     {
-        public MainWindow(WeatherDataSummary summary)
+        public MainWindow(WeatherDataSummary summary, LongLatCalcs translator)
             : this()
         {
+            _translator = translator;
             _summary = summary;
-
             _summary.PropertyChanged += HandleSummaryChange;
+
+            for (int i = 0; i <= (int)StateCode.XX; i += 1)
+            {
+                _currentState.Items.Add((StateCode)i);
+            }
+            _currentState.SelectedIndexChanged += HandleStateChange;
+            _currentState.SelectedIndex = 0;
+        }
+
+        private void HandleStateChange(object sender, EventArgs e)
+        {
+            string selectedCode = _currentState.SelectedItem.ToString();
+            StateCode code = (StateCode)Enum.Parse(typeof(StateCode), selectedCode);
+            GeographicBounds bounds = _translator.BoundsForState(code);
+            _latitude.Minimum = bounds.MinimumLatitude;
+            _latitude.Maximum = bounds.MaximumLatitude;
+            _longitude.Minimum = bounds.MinimumLongitude;
+            _longitude.Maximum = bounds.MaximumLongitude;
         }
 
         private void HandleSummaryChange(object sender, PropertyChangedEventArgs args)
@@ -32,13 +52,19 @@ namespace WeatherService.Desktop
                 }
                 if (args.PropertyName == "TopLogs")
                 {
-                    _logViewer.Text = "";
+                    StringBuilder buffer = new StringBuilder();
+                    buffer.Append("<html><head><style>html, body { font-family: Verdana; font-size: 8.5pt; }</style></head><body>");
                     foreach (ServiceEvent e in _summary.TopLogs)
                     {
-                        _logViewer.Text += e.ServiceName + Environment.NewLine;
-                        _logViewer.Text += e.EventDescription + Environment.NewLine;
-                        _logViewer.Text += Environment.NewLine;
+                        buffer.Append($@"
+                            <p>
+                                <b>{e.ServiceName}</b><br>
+                                <i>{e.EventDateTime.ToShortDateString()} {e.EventDateTime.ToShortTimeString()}</i><br>
+                                <div>{e.EventDescription}</div>
+                            </p>");
                     }
+                    buffer.Append("</body></html>");
+                    _htmlLogViewer.DocumentText = buffer.ToString();
                 }
             });
         }
@@ -49,5 +75,6 @@ namespace WeatherService.Desktop
         }
 
         private readonly WeatherDataSummary _summary;
+        private readonly LongLatCalcs _translator;
     }
 }
