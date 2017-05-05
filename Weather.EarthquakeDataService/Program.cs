@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Threading;
+using System.Configuration;
 
 namespace Weather.EarthquakeDataService
 {
-    class Program
+    public class Program
     {
-        public static object TemporaryCityTool { get; private set; }
-
         static void Main(string[] args)
         {
-            string connectionstring = "Server=localhost;Database=WeatherService;Integrated Security=True";
+            string connectionString = ConfigurationManager.ConnectionStrings["WeatherService"].ConnectionString;
+            string earthquackFileName = ConfigurationManager.AppSettings["EarthquackFileName"];
 
             for (;;)
             {
-                RunEarthQuake runEarthQuake = new RunEarthQuake(connectionstring);
-                runEarthQuake.DoStuff();
-                Console.WriteLine("waiting 5 minutes...");
+                RunEarthQuake runEarthQuake = new RunEarthQuake();
+                runEarthQuake.DoStuff(connectionString, earthquackFileName);
+                Console.WriteLine("This process runs for every 5 minutes ...");
                 Thread.Sleep(1000 * 60 * 1);
                 Console.WriteLine("wait Time-End");
             }
@@ -25,6 +25,7 @@ namespace Weather.EarthquakeDataService
         {
             throw new NotImplementedException();
         }
+
     }
 }
 

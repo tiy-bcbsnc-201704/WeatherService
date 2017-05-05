@@ -25,10 +25,10 @@ namespace WeatherService.Desktop
                         SolarWindCount = facade.GetSolarWindCount();
                         WeatherCount = facade.GetWeatherCount();
                         TopLogs = facade.GetTopLogs();
-                        Thread.Sleep(100);
+                        Thread.Sleep(250);
                     }
                 }
-                catch (Exception) { }
+                catch (Exception) {}
             });
             summarizer.Start();
         }

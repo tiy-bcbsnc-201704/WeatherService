@@ -2,14 +2,23 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using Weather.EventNotifier;
+using System;
+using Weather.LocationTranslator;
 
 namespace WeatherService.Desktop
 {
-    internal class QueryFacade
+    public class QueryFacade
     {
         public QueryFacade(string connectionString)
         {
             _connectionString = connectionString;
+        }
+
+        public StateCode StateForGeographicPoint(decimal latitude, decimal longitude)
+        {
+            double lat = Convert.ToDouble(latitude);
+            double lon = Convert.ToDouble(longitude);
+            return new LongLatCalcs(_connectionString).StateForLongLat(lon, lat);
         }
 
         public int GetSolarWindCount()

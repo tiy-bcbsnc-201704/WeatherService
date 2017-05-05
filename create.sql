@@ -13,26 +13,26 @@ CREATE TABLE Earthquake
 (
       EarthquakeId                 int identity(1,1) primary key not null,
       EventTime                    datetime NOT NULL,
-      Latitude                     decimal,
-      Longitude                    decimal,
-      Depth                        decimal,
-      Magnitude                    decimal,
+      Latitude                     decimal(20,10),
+      Longitude                    decimal(20,10),
+      Depth                        decimal(20,10),
+      Magnitude                    decimal(20,10),
       MagnitudeType                NVARCHAR(2),
       SeismicStations              int,
-      AzimuthalGap                 decimal,
-      EpiCenterDistance            decimal,
-      RootMeanSquare               decimal,
-      DataContributorId            NVARCHAR(2), 
-      NetworkIdentifier            NVARCHAR(10),
-      RecentUpdateTime             datetime ,
-      GeographicRegion             NVARCHAR(10),
-      SeismicEventType             NVARCHAR(20),
-      HorizontalError              decimal ,
-      DepthError                   decimal ,
-      MagnitudeError               decimal ,
+      AzimuthalGap                 decimal(20,10),
+      EpiCenterDistance            decimal(20,10),
+      RootMeanSquare               decimal(20,10),
+      DataContributorId            NVARCHAR(2),  
+      NetworkIdentifier            NVARCHAR(1000), 
+      RecentUpdateTime             datetime,
+      GeographicRegion             NVARCHAR(1000), 
+      SeismicEventType             NVARCHAR(2000), 
+      HorizontalError              decimal (20,10),
+      DepthError                   decimal (20,10),
+      MagnitudeError               decimal (20,10),
       MagniteOfEarthquake          int   ,
-      EventsReviewed               NVARCHAR(20),
-      LocationSource               NVARCHAR(2),     
+      EventsReviewed               NVARCHAR(200),
+      LocationSource               NVARCHAR(2),      
       MagnitudeSource              NVARCHAR(2)
 )
 
@@ -48,19 +48,20 @@ Latitude DECIMAL(5,2) NOT NULL,
 Temperature DECIMAL(5,2) NOT NULL
 )
 
-create table WeatherDataService
-(
-  Id INT PRIMARY KEY IDENTITY (1,1) NOT NULL,
-  StationID NVARCHAR(20) NOT NULL,
-  Location NVARCHAR(500) NOT NULL,
-  Latitude DECIMAL,
-  Longitude DECIMAL,
-  ObservationTime DATETIME,
-  WeatherCondition NVARCHAR(20)NOT NULL,
-  Temperature DECIMAL,
-  Humidity INT,
-  CreationDateTime DATETIME  
-)
+CREATE TABLE WeatherDataService
+  (
+	Id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	StationId NVARCHAR(20) NOT NULL,
+	Location NVARCHAR(500) NOT NULL,
+	Latitude DECIMAL(8,5),
+	Longitude DECIMAL(8,5),
+	ObservationTime DATETIME,
+	WeatherCondition NVARCHAR(50) NOT NULL,
+	Temperature DECIMAL(4,1),
+	Humidity INT,
+	CreationDateTime DATETIME 	
+  
+    )
 
 CREATE TABLE ServiceEvents (
 EventId INT PRIMARY KEY IDENTITY (1,1) NOT NULL,
