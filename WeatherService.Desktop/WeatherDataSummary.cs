@@ -1,11 +1,38 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using Weather.EventNotifier;
 
 namespace WeatherService.Desktop
 {
     public class WeatherDataSummary : INotifyPropertyChanged
     {
+        internal WeatherDataSummary(QueryFacade facade)
+        {
+            _facade = facade;
+            _logs = new List<ServiceEvent>();
+
+            Task summarizer = new Task(() =>
+            {
+                try
+                {
+                    while (true)
+                    {
+                        EarthquakeCount = facade.GetEarthquakeCount();
+                        SolarWindCount = facade.GetSolarWindCount();
+                        WeatherCount = facade.GetWeatherCount();
+                        TopLogs = facade.GetTopLogs();
+                        Thread.Sleep(100);
+                    }
+                }
+                catch (Exception) { }
+            });
+            summarizer.Start();
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public int EarthquakeCount
@@ -43,8 +70,13 @@ namespace WeatherService.Desktop
             get { return _logs; }
             set
             {
-                _logs = value;
-                FirePropertyChanged("TopLogs");
+                ServiceEvent valued = value.FirstOrDefault() ?? new ServiceEvent();
+                ServiceEvent logged = _logs.FirstOrDefault() ?? new ServiceEvent();
+                if (valued.EventId != logged.EventId)
+                {
+                    _logs = value;
+                    FirePropertyChanged("TopLogs");
+                }
             }
         }
 
@@ -61,5 +93,6 @@ namespace WeatherService.Desktop
         private int _solarWindCount;
         private int _weatherCount;
         private IEnumerable<ServiceEvent> _logs;
+        private readonly QueryFacade _facade;
     }
 }
