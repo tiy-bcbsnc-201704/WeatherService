@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Windows.Forms;
 using Weather.LocationTranslator;
+using Weather.Query;
 
 namespace WeatherService.Desktop
 {
@@ -17,10 +18,11 @@ namespace WeatherService.Desktop
             QueryFacade facade = new QueryFacade(connectionString);
             WeatherDataSummary summary = new WeatherDataSummary(facade);
             LongLatCalcs translator = new LongLatCalcs(connectionString);
+            ConditionsRepository repo = new ConditionsRepository(connectionString);
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow(summary, translator));
+            Application.Run(new MainWindow(summary, translator, repo));
         }
     }
 }

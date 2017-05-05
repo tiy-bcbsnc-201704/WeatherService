@@ -100,6 +100,14 @@
       <Project>{538E8023-AF49-4E4F-8DF5-1D42D833DAA4}</Project>
       <Name>Weather.LocationTranslator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Weather.Query\Weather.Query.csproj">
+      <Project>{D3A2828A-5B9E-4E2C-870B-BA00DE756B5B}</Project>
+      <Name>Weather.Query</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Weather.SolarWindDataService\Weather.SolarWindDataService.csproj">
+      <Project>{92DA0526-B542-4555-B035-FECFB54D2543}</Project>
+      <Name>Weather.SolarWindDataService</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

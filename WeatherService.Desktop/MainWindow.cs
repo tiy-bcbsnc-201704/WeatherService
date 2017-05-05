@@ -4,14 +4,17 @@ using System.Text;
 using System.Windows.Forms;
 using Weather.EventNotifier;
 using Weather.LocationTranslator;
+using Weather.Query;
+using Weather.SolarWindDataService;
 
 namespace WeatherService.Desktop
 {
     public partial class MainWindow : Form
     {
-        public MainWindow(WeatherDataSummary summary, LongLatCalcs translator)
+        public MainWindow(WeatherDataSummary summary, LongLatCalcs translator, IProvideConditions repo)
             : this()
         {
+            _repo = repo;
             _translator = translator;
             _summary = summary;
             _summary.PropertyChanged += HandleSummaryChange;
@@ -22,6 +25,11 @@ namespace WeatherService.Desktop
             }
             _currentState.SelectedIndexChanged += HandleStateChange;
             _currentState.SelectedIndex = 0;
+        }
+
+        public MainWindow()
+        {
+            InitializeComponent();
         }
 
         private void HandleStateChange(object sender, EventArgs e)
@@ -55,7 +63,7 @@ namespace WeatherService.Desktop
                     if (args.PropertyName == "TopLogs")
                     {
                         StringBuilder buffer = new StringBuilder();
-                        buffer.Append("<html><head><style>html, body { font-family: Verdana; font-size: 8.5pt; }</style></head><body>");
+                        buffer.Append("<html><head><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/foundation/6.2.4/foundation.min.css\"></head><body>");
                         foreach (ServiceEvent e in _summary.TopLogs)
                         {
                             buffer.Append($@"
@@ -73,12 +81,28 @@ namespace WeatherService.Desktop
             catch (Exception) {}
         }
 
-        public MainWindow()
+        private void HandleFetch(object sender, EventArgs e)
         {
-            InitializeComponent();
+            DateTime when = _when.Value;
+            double lat = Convert.ToDouble(_latitude.Value);
+            double lon = Convert.ToDouble(_longitude.Value);
+
+            IHaveConditions conditions = _repo.Query(when, lat, lon);
+
+            StringBuilder buffer = new StringBuilder();
+            buffer.Append("<html><head><link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/foundation/6.2.4/foundation.min.css\"></head><body>");
+            buffer.Append("<h2>Solar Winds</h2><table><thead><tr><th>Temp</th><th>X</th><th>Y</th><th>Z</th></thead><tbody>");
+            foreach (IBlow wind in conditions.SolarWind)
+            {
+                buffer.Append($"<tr><td>{wind.Temperature}</td><td>{wind.XCoordinate}</td><td>{wind.YCoordinate}</td><td>{wind.ZCoordinate}</td></tr>");
+            }
+            buffer.Append("</tbody></table>");
+            buffer.Append("</body></html>");
+            _htmlLogViewer.DocumentText = buffer.ToString();
         }
 
         private readonly WeatherDataSummary _summary;
         private readonly LongLatCalcs _translator;
+        private readonly IProvideConditions _repo;
     }
 }
