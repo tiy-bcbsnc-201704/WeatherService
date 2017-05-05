@@ -35,17 +35,17 @@
             System.Windows.Forms.Label earthquakeCountLabel;
             System.Windows.Forms.Label weatherRecordsCountLabel;
             System.Windows.Forms.Panel queryPanel;
+            System.Windows.Forms.Label longitudeLabel;
             System.Windows.Forms.Label latitiudeLabel;
             System.Windows.Forms.Label whenLabel;
-            System.Windows.Forms.Label label1;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this._logViewer = new System.Windows.Forms.TextBox();
             this._weatherCount = new System.Windows.Forms.Label();
             this._solarWindCount = new System.Windows.Forms.Label();
             this._earthquakeCount = new System.Windows.Forms.Label();
+            this._longitude = new System.Windows.Forms.NumericUpDown();
             this._latitude = new System.Windows.Forms.NumericUpDown();
             this._when = new System.Windows.Forms.DateTimePicker();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             summaryPanel = new System.Windows.Forms.Panel();
             summaryHeaderPanel = new System.Windows.Forms.Panel();
             logViewerLabel = new System.Windows.Forms.Label();
@@ -53,14 +53,14 @@
             earthquakeCountLabel = new System.Windows.Forms.Label();
             weatherRecordsCountLabel = new System.Windows.Forms.Label();
             queryPanel = new System.Windows.Forms.Panel();
+            longitudeLabel = new System.Windows.Forms.Label();
             latitiudeLabel = new System.Windows.Forms.Label();
             whenLabel = new System.Windows.Forms.Label();
-            label1 = new System.Windows.Forms.Label();
             summaryPanel.SuspendLayout();
             summaryHeaderPanel.SuspendLayout();
             queryPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._longitude)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this._latitude)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // summaryPanel
@@ -165,8 +165,8 @@
             // 
             // queryPanel
             // 
-            queryPanel.Controls.Add(this.numericUpDown1);
-            queryPanel.Controls.Add(label1);
+            queryPanel.Controls.Add(this._longitude);
+            queryPanel.Controls.Add(longitudeLabel);
             queryPanel.Controls.Add(this._latitude);
             queryPanel.Controls.Add(latitiudeLabel);
             queryPanel.Controls.Add(this._when);
@@ -176,6 +176,25 @@
             queryPanel.Name = "queryPanel";
             queryPanel.Size = new System.Drawing.Size(424, 441);
             queryPanel.TabIndex = 1;
+            // 
+            // _longitude
+            // 
+            this._longitude.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._longitude.DecimalPlaces = 5;
+            this._longitude.Location = new System.Drawing.Point(66, 64);
+            this._longitude.Name = "_longitude";
+            this._longitude.Size = new System.Drawing.Size(346, 20);
+            this._longitude.TabIndex = 5;
+            // 
+            // longitudeLabel
+            // 
+            longitudeLabel.AutoSize = true;
+            longitudeLabel.Location = new System.Drawing.Point(6, 67);
+            longitudeLabel.Name = "longitudeLabel";
+            longitudeLabel.Size = new System.Drawing.Size(54, 13);
+            longitudeLabel.TabIndex = 4;
+            longitudeLabel.Text = "Longitude";
             // 
             // _latitude
             // 
@@ -216,25 +235,6 @@
             whenLabel.TabIndex = 0;
             whenLabel.Text = "When";
             // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.numericUpDown1.DecimalPlaces = 5;
-            this.numericUpDown1.Location = new System.Drawing.Point(66, 64);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(346, 20);
-            this.numericUpDown1.TabIndex = 5;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Location = new System.Drawing.Point(6, 67);
-            label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(54, 13);
-            label1.TabIndex = 4;
-            label1.Text = "Longitude";
-            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -251,8 +251,8 @@
             summaryHeaderPanel.PerformLayout();
             queryPanel.ResumeLayout(false);
             queryPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this._longitude)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this._latitude)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -265,7 +265,7 @@
         private System.Windows.Forms.TextBox _logViewer;
         private System.Windows.Forms.DateTimePicker _when;
         private System.Windows.Forms.NumericUpDown _latitude;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown _longitude;
     }
 }
 
