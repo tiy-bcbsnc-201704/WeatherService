@@ -92,6 +92,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Weather.EarthquakeDataService\Weather.EarthquakeDataService.csproj">
+      <Project>{84F92421-B308-47F7-88D3-A29D52DCD82D}</Project>
+      <Name>Weather.EarthquakeDataService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Weather.EventNotifier\Weather.EventNotifier.csproj">
       <Project>{3DBB113A-9124-4F92-91D1-3F0245ABCAB0}</Project>
       <Name>Weather.EventNotifier</Name>

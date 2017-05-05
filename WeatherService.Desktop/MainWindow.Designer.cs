@@ -79,7 +79,7 @@
             summaryPanel.Dock = System.Windows.Forms.DockStyle.Left;
             summaryPanel.Location = new System.Drawing.Point(0, 0);
             summaryPanel.Name = "summaryPanel";
-            summaryPanel.Size = new System.Drawing.Size(200, 441);
+            summaryPanel.Size = new System.Drawing.Size(302, 441);
             summaryPanel.TabIndex = 0;
             // 
             // _htmlLogViewer
@@ -88,7 +88,7 @@
             this._htmlLogViewer.Location = new System.Drawing.Point(0, 129);
             this._htmlLogViewer.MinimumSize = new System.Drawing.Size(20, 20);
             this._htmlLogViewer.Name = "_htmlLogViewer";
-            this._htmlLogViewer.Size = new System.Drawing.Size(200, 312);
+            this._htmlLogViewer.Size = new System.Drawing.Size(302, 312);
             this._htmlLogViewer.TabIndex = 6;
             // 
             // summaryHeaderPanel
@@ -103,7 +103,7 @@
             summaryHeaderPanel.Dock = System.Windows.Forms.DockStyle.Top;
             summaryHeaderPanel.Location = new System.Drawing.Point(0, 0);
             summaryHeaderPanel.Name = "summaryHeaderPanel";
-            summaryHeaderPanel.Size = new System.Drawing.Size(200, 129);
+            summaryHeaderPanel.Size = new System.Drawing.Size(302, 129);
             summaryHeaderPanel.TabIndex = 7;
             // 
             // logViewerLabel
@@ -175,9 +175,9 @@
             queryPanel.Controls.Add(this._searchResults);
             queryPanel.Controls.Add(resultsHeaderPanel);
             queryPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            queryPanel.Location = new System.Drawing.Point(200, 0);
+            queryPanel.Location = new System.Drawing.Point(302, 0);
             queryPanel.Name = "queryPanel";
-            queryPanel.Size = new System.Drawing.Size(424, 441);
+            queryPanel.Size = new System.Drawing.Size(322, 441);
             queryPanel.TabIndex = 1;
             // 
             // _searchResults
@@ -186,7 +186,7 @@
             this._searchResults.Location = new System.Drawing.Point(0, 129);
             this._searchResults.MinimumSize = new System.Drawing.Size(20, 20);
             this._searchResults.Name = "_searchResults";
-            this._searchResults.Size = new System.Drawing.Size(424, 312);
+            this._searchResults.Size = new System.Drawing.Size(322, 312);
             this._searchResults.TabIndex = 9;
             // 
             // resultsHeaderPanel
@@ -203,13 +203,13 @@
             resultsHeaderPanel.Dock = System.Windows.Forms.DockStyle.Top;
             resultsHeaderPanel.Location = new System.Drawing.Point(0, 0);
             resultsHeaderPanel.Name = "resultsHeaderPanel";
-            resultsHeaderPanel.Size = new System.Drawing.Size(424, 129);
+            resultsHeaderPanel.Size = new System.Drawing.Size(322, 129);
             resultsHeaderPanel.TabIndex = 8;
             // 
             // fetch
             // 
             fetch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            fetch.Location = new System.Drawing.Point(346, 84);
+            fetch.Location = new System.Drawing.Point(244, 84);
             fetch.Name = "fetch";
             fetch.Size = new System.Drawing.Size(75, 23);
             fetch.TabIndex = 8;
@@ -234,7 +234,7 @@
             0,
             -2147483648});
             this._longitude.Name = "_longitude";
-            this._longitude.Size = new System.Drawing.Size(274, 20);
+            this._longitude.Size = new System.Drawing.Size(172, 20);
             this._longitude.TabIndex = 5;
             // 
             // _currentState
@@ -245,7 +245,7 @@
             this._currentState.FormattingEnabled = true;
             this._currentState.Location = new System.Drawing.Point(66, 33);
             this._currentState.Name = "_currentState";
-            this._currentState.Size = new System.Drawing.Size(274, 21);
+            this._currentState.Size = new System.Drawing.Size(172, 21);
             this._currentState.TabIndex = 7;
             // 
             // whenLabel
@@ -274,7 +274,7 @@
             this._when.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this._when.Location = new System.Drawing.Point(66, 7);
             this._when.Name = "_when";
-            this._when.Size = new System.Drawing.Size(274, 20);
+            this._when.Size = new System.Drawing.Size(172, 20);
             this._when.TabIndex = 1;
             // 
             // latitiudeLabel
@@ -312,7 +312,7 @@
             0,
             -2147483648});
             this._latitude.Name = "_latitude";
-            this._latitude.Size = new System.Drawing.Size(274, 20);
+            this._latitude.Size = new System.Drawing.Size(172, 20);
             this._latitude.TabIndex = 3;
             // 
             // MainWindow

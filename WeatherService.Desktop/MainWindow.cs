@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
+using Weather.EarthquakeDataService;
 using Weather.EventNotifier;
 using Weather.LocationTranslator;
 using Weather.Query;
@@ -102,6 +103,12 @@ namespace WeatherService.Desktop
             foreach (IHaveWeather weather in conditions.Weather)
             {
                 buffer.Append($"<tr><td>{weather.Temperature}</td><td>{weather.Humidity}</td><td>{weather.Location}</td><td>{weather.StationId}</td></tr>");
+            }
+            buffer.Append("</tbody></table>");
+            buffer.Append("<h2>Earthquake Data</h2><table><thead><tr><th>Depth</th><th>Magnitude</th><th>Epicenter Distance</th><th>Magnitude Type</th></thead><tbody>");
+            foreach (IRumble quake in conditions.Earthquakes)
+            {
+                buffer.Append($"<tr><td>{quake.Depth}</td><td>{quake.Magnitude}</td><td>{quake.EpiCenterDistance}</td><td>{quake.MagnitudeType}</td></tr>");
             }
             buffer.Append("</tbody></table>");
             buffer.Append("</body></html>");
