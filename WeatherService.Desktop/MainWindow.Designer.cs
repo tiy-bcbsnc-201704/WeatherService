@@ -39,13 +39,13 @@
             System.Windows.Forms.Label latitiudeLabel;
             System.Windows.Forms.Label whenLabel;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            this._logViewer = new System.Windows.Forms.TextBox();
             this._weatherCount = new System.Windows.Forms.Label();
             this._solarWindCount = new System.Windows.Forms.Label();
             this._earthquakeCount = new System.Windows.Forms.Label();
             this._longitude = new System.Windows.Forms.NumericUpDown();
             this._latitude = new System.Windows.Forms.NumericUpDown();
             this._when = new System.Windows.Forms.DateTimePicker();
+            this._htmlLogViewer = new System.Windows.Forms.WebBrowser();
             summaryPanel = new System.Windows.Forms.Panel();
             summaryHeaderPanel = new System.Windows.Forms.Panel();
             logViewerLabel = new System.Windows.Forms.Label();
@@ -65,24 +65,13 @@
             // 
             // summaryPanel
             // 
-            summaryPanel.Controls.Add(this._logViewer);
+            summaryPanel.Controls.Add(this._htmlLogViewer);
             summaryPanel.Controls.Add(summaryHeaderPanel);
             summaryPanel.Dock = System.Windows.Forms.DockStyle.Left;
             summaryPanel.Location = new System.Drawing.Point(0, 0);
             summaryPanel.Name = "summaryPanel";
             summaryPanel.Size = new System.Drawing.Size(200, 441);
             summaryPanel.TabIndex = 0;
-            // 
-            // _logViewer
-            // 
-            this._logViewer.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this._logViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._logViewer.Enabled = false;
-            this._logViewer.Location = new System.Drawing.Point(0, 135);
-            this._logViewer.Multiline = true;
-            this._logViewer.Name = "_logViewer";
-            this._logViewer.Size = new System.Drawing.Size(200, 306);
-            this._logViewer.TabIndex = 6;
             // 
             // summaryHeaderPanel
             // 
@@ -96,14 +85,14 @@
             summaryHeaderPanel.Dock = System.Windows.Forms.DockStyle.Top;
             summaryHeaderPanel.Location = new System.Drawing.Point(0, 0);
             summaryHeaderPanel.Name = "summaryHeaderPanel";
-            summaryHeaderPanel.Size = new System.Drawing.Size(200, 135);
+            summaryHeaderPanel.Size = new System.Drawing.Size(200, 129);
             summaryHeaderPanel.TabIndex = 7;
             // 
             // logViewerLabel
             // 
             logViewerLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             logViewerLabel.AutoSize = true;
-            logViewerLabel.Location = new System.Drawing.Point(12, 119);
+            logViewerLabel.Location = new System.Drawing.Point(12, 102);
             logViewerLabel.Name = "logViewerLabel";
             logViewerLabel.Size = new System.Drawing.Size(60, 13);
             logViewerLabel.TabIndex = 6;
@@ -235,6 +224,15 @@
             whenLabel.TabIndex = 0;
             whenLabel.Text = "When";
             // 
+            // _htmlLogViewer
+            // 
+            this._htmlLogViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._htmlLogViewer.Location = new System.Drawing.Point(0, 129);
+            this._htmlLogViewer.MinimumSize = new System.Drawing.Size(20, 20);
+            this._htmlLogViewer.Name = "_htmlLogViewer";
+            this._htmlLogViewer.Size = new System.Drawing.Size(200, 312);
+            this._htmlLogViewer.TabIndex = 6;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -246,7 +244,6 @@
             this.Name = "MainWindow";
             this.Text = "Weather Service";
             summaryPanel.ResumeLayout(false);
-            summaryPanel.PerformLayout();
             summaryHeaderPanel.ResumeLayout(false);
             summaryHeaderPanel.PerformLayout();
             queryPanel.ResumeLayout(false);
@@ -262,10 +259,10 @@
         private System.Windows.Forms.Label _earthquakeCount;
         private System.Windows.Forms.Label _weatherCount;
         private System.Windows.Forms.Label _solarWindCount;
-        private System.Windows.Forms.TextBox _logViewer;
         private System.Windows.Forms.DateTimePicker _when;
         private System.Windows.Forms.NumericUpDown _latitude;
         private System.Windows.Forms.NumericUpDown _longitude;
+        private System.Windows.Forms.WebBrowser _htmlLogViewer;
     }
 }
 
