@@ -21,7 +21,7 @@ namespace Weather.EarthquakeDataService
             DownloadFile();
 
             EventNotifier.EventHandler eh = new EventNotifier.EventHandler(_connectionString);
-            eh.Record(ServiceName.SolarWindService, "SolarWind table successfully updated");
+            eh.Record(ServiceName.EarthquakeService, "SolarWind table successfully updated");
             
             ReadEarthQuack();
         }
