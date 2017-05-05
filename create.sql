@@ -48,19 +48,20 @@ Latitude DECIMAL(5,2) NOT NULL,
 Temperature DECIMAL(5,2) NOT NULL
 )
 
-create table WeatherDataService
-(
-  Id INT PRIMARY KEY IDENTITY (1,1) NOT NULL,
-  StationID NVARCHAR(20) NOT NULL,
-  Location NVARCHAR(500) NOT NULL,
-  Latitude DECIMAL,
-  Longitude DECIMAL,
-  ObservationTime DATETIME,
-  WeatherCondition NVARCHAR(20)NOT NULL,
-  Temperature DECIMAL,
-  Humidity INT,
-  CreationDateTime DATETIME  
-)
+CREATE TABLE WeatherDataService
+  (
+	Id INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	StationId NVARCHAR(20) NOT NULL,
+	Location NVARCHAR(500) NOT NULL,
+	Latitude DECIMAL(8,5),
+	Longitude DECIMAL(8,5),
+	ObservationTime DATETIME,
+	WeatherCondition NVARCHAR(50) NOT NULL,
+	Temperature DECIMAL(4,1),
+	Humidity INT,
+	CreationDateTime DATETIME 	
+  
+    )
 
 CREATE TABLE ServiceEvents (
 EventId INT PRIMARY KEY IDENTITY (1,1) NOT NULL,
