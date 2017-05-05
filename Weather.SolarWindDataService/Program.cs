@@ -63,8 +63,8 @@ namespace Weather.SolarWindDataService
                     }
 
                     // Call the EventNotifier service to record the time the file was downloaded
-                    //EventNotifier.EventHandler eh = new EventNotifier.EventHandler(connectionString);
-                    //eh.Record(ServiceName.SolarWindService, "SolarWind table successfully updated");
+                    EventNotifier.EventHandler eh = new EventNotifier.EventHandler(connectionString);
+                    eh.Record(ServiceName.SolarWindService, "SolarWind table successfully updated");
 
                     Thread.Sleep(60000); // 60000 = 60 seconds
                 }

@@ -3,22 +3,25 @@ using System.Net;
 using System.IO;
 using System;
 using Dapper.Contrib.Extensions;
+using Weather.EventNotifier;
 
 namespace Weather.EarthquakeDataService
 {
     internal class RunEarthQuake
     {
-        public RunEarthQuake()
-        {
+        private readonly string _connectionString;
 
+        public RunEarthQuake(string connectionString)
+        {
+            _connectionString = connectionString;
         }
 
         public void DoStuff()
         {
             DownloadFile();
 
-            EventNotifier.EventHandler eh = new EventNotifier.EventHandler(connectionString);
-            eh.Record(ServiceName.SolarWindService, "SolarWind table successfully updated");
+            EventNotifier.EventHandler eh = new EventNotifier.EventHandler(_connectionString);
+            eh.Record(ServiceName.EarthquakeService, "SolarWind table successfully updated");
             
             ReadEarthQuack();
         }
@@ -47,13 +50,13 @@ namespace Weather.EarthquakeDataService
                     parts = line.Split(',');
                     if (parts[0] != "time")
                     {
-                        Earthquake earthquake = SetFields();
+                        //SetFields();
 
                         SetFields setFields = new SetFields();
 
-                        setFields.SetField(parts);
+                        Earthquake earthquake = setFields.SetField(parts);
 
-                        InsertEarthQuack insertEarthQuack = new InsertEarthQuack();
+                        InsertEarthQuack insertEarthQuack = new InsertEarthQuack(_connectionString);
                         insertEarthQuack.InsertEarthQuackM(earthquake);
                     }
                 }

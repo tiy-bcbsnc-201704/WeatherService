@@ -5,11 +5,17 @@ namespace Weather.EarthquakeDataService
 {
     public class InsertEarthQuack
     {
+        private readonly string _connectionString;
+
+        public InsertEarthQuack(string connectionString)
+        {
+            _connectionString = connectionString;
+        }
+
         internal void InsertEarthQuackM(Earthquake earthquake)
         {
             Earthquake _earthquakeInt = earthquake;
-            string connectionstring = "Server=localhost;Database=WeatherService;Integrated Security=True";
-            using (SqlConnection connection = new SqlConnection(connectionstring))
+            using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 connection.Insert(_earthquakeInt);
             }

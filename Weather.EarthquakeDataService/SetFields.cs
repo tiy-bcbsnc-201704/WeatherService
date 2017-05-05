@@ -8,10 +8,7 @@ namespace Weather.EarthquakeDataService
 {
     public class SetFields
     {
-        private SetFields(string[] parts)
-        {
-        }
-        private void SetField()
+        public Earthquake SetField(string[] parts)
         {
 
             Earthquake earthquake = new Earthquake();
