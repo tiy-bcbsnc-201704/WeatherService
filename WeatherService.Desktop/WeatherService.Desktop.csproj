@@ -95,6 +95,10 @@
       <Project>{3DBB113A-9124-4F92-91D1-3F0245ABCAB0}</Project>
       <Name>Weather.EventNotifier</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Weather.LocationTranslator\Weather.LocationTranslator.csproj">
+      <Project>{538E8023-AF49-4E4F-8DF5-1D42D833DAA4}</Project>
+      <Name>Weather.LocationTranslator</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

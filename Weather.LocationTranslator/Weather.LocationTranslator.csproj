@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GeographicBounds.cs" />
     <Compile Include="LongLatCalcs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StateCode.cs" />

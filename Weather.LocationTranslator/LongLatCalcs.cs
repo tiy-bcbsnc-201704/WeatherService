@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dapper;
+using System;
 using System.Data.SqlClient;
 
 namespace Weather.LocationTranslator
@@ -14,10 +15,23 @@ namespace Weather.LocationTranslator
             _connectionString = connectionString;
         }
     
+        public GeographicBounds BoundsForState(StateCode code)
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                return connection.QuerySingle<GeographicBounds>(@"
+                    SELECT MIN(Latitude) AS MinimumLatitude
+                         , MAX(Latitude) AS MaximumLatitude
+	                     , MIN(Longitude) AS MinimumLongitude
+	                     , MAX(Longitude) AS MaximumLongitude
+                      FROM LongLatLocs
+                     WHERE StateCode = @Code
+                ", new { Code = code.ToString() });
+            }
+        }
 
 
-
-    public StateCode StateForLongLat(double longitude, double latitude)
+        public StateCode StateForLongLat(double longitude, double latitude)
     {
 
 
