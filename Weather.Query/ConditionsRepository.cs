@@ -30,9 +30,7 @@ namespace Weather.Query
                           , Latitude
                           , Temperature
                        FROM SolarWindData 
-                      WHERE MeasurementDateTime = @WhenParameter
-                        AND Latitude = @LatitudeParameter,
-                        AND Longitude = @LongitudeParameter", sqlParameters);
+                      WHERE ABS(DATEDIFF('n', MeasurementDateTime, @WhenParameter)) <=5", sqlParameters);
 
                 conditionreport.SolarWind = solar;
 
@@ -49,11 +47,13 @@ namespace Weather.Query
                             , Humidity
                             , CreationDateTime
                        FROM WeatherDataService  
-                      WHERE ObservationTime = @WhenParameter  
-                        AND Latitude        = @LatitudeParameter 
-                        AND Longitude       = @LongitudeParameter", sqlParameters);
+                      WHERE ABS(DATEDIFF('n', MeasurementDateTime, @WhenParameter)) <=5
+                        AND Latitude  = @LatitudeParameter 
+                        AND Longitude = @LongitudeParameter", sqlParameters);
+                
 
                 conditionreport.Weather = weather;
+
 
                 EarthquakeData earthQuakeDate = new EarthquakeData();
                 IEnumerable<EarthquakeData> earthQuake = connection.Query<EarthquakeData>(@"
@@ -81,9 +81,9 @@ namespace Weather.Query
                             , LocationSource
                             , MagnitudeSource
                         FROM WeatherDataService 
-                       WHERE EventTime = @WhenParameter  
-                         AND Latitude  = @LatitudeParameter 
-                         AND Longitude = @LongitudeParameter", sqlParameters);
+                       WHERE ABS(DATEDIFF('n', MeasurementDateTime, @WhenParameter)) <=5  
+                         AND (SQUARE(Latitude - @LatitudeParameter)  +
+                             SQUARE(Longitude -@LongitudeParameter)) <= 1", sqlParameters);
 
                 conditionreport.Earthquakes = earthQuake;
             }
