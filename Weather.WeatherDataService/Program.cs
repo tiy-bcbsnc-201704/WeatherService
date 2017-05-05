@@ -25,9 +25,6 @@ namespace Weather.WeatherDataService
             //  download the zip file...
             using (WebClient webClient = new WebClient())
             {
-               DateTime today = DateTime.Now;
-               DateTime observationDateTime = today;
-               Console.WriteLine($"Start downloading file, {today}");
                webClient.Headers.Add("Accept", "text/html,application/xhtml + xml,application/xml; q = 0.9,image/webp,image/apng,*/*;q=0.8");
                webClient.Headers.Add("Accept-Encoding", "gzip, deflate");
                webClient.Headers.Add("Accept-Language", "en-US,en;q=0.8");
@@ -38,16 +35,21 @@ namespace Weather.WeatherDataService
                webClient.Headers.Add("Upgrade-Insecure-Requests", "1");
                webClient.Headers.Add("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3088.0 Safari/537.36");
                webClient.DownloadFile("http://w1.weather.gov/xml/current_obs/all_xml.zip", "WeatherData.zip");
-               Console.WriteLine($"Finish downloading file, {today}");
-            }
+             }
 
             // create the subfolder.....
             string directorName = Directory.GetCurrentDirectory();
             string subDirectoryName = "\\xmls";
-            Directory.CreateDirectory("xmls");
-
             string xmlFilePath = directorName + subDirectoryName;
-
+            if (Directory.Exists(xmlFilePath))
+            {
+               Directory.Delete(xmlFilePath, true);
+            }
+            else
+            {
+               Directory.CreateDirectory("xmls");
+            }
+            
             // unzip the file
             ZipFile.ExtractToDirectory("WeatherData.zip", xmlFilePath);
 

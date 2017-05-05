@@ -24,21 +24,65 @@ namespace Weather.SolarWindDataService
 
                     // Download the file into a string
                     string solarWindData = webClient.DownloadString("http://services.swpc.noaa.gov/products/solar-wind/mag-5-minute.json");
-
+                    //string solarWindData = webClient.DownloadString("http://services.swpc.noaa.gov/products/solar-wind/mag-7-day.json");
                     // Parse the JSON file data in an array
                     JArray solarWindDataArray = JArray.Parse(solarWindData);
 
+                    bool errorFree;
+
                     // We know there are only 2 array downloaded at any time
                     // the "zeroith" row contians the row headers - we  do not need this row 
-                    for (int i = 1; i < 3; i += 1)
+                    for (int i = 1; i < solarWindDataArray.Count; i += 1)
                     {
+                        JArray dataRow = (JArray)solarWindDataArray[i];
+
                         // Create list that contains all fields in a row
-                        List<object> windData = new List<object>(solarWindDataArray[i]);
-                          
+                        List<JValue> windData = new List<JValue>();
+                        foreach (JValue value in dataRow)
+                        {
+                            windData.Add(value);
+                        }
+
                         using (SqlConnection connection = new SqlConnection(connectionString))
                         {
                             SolarWind solarWind = new SolarWind();
+
+                            // Test fields for null values. if null default to 0.00 value and set indicator to exclude row of data.
                             // Set database varibles equal to data downloaded (and converted)
+
+                            errorFree = true;
+
+                            if (windData[1].Value == null)
+                            {
+                                windData[1] = new JValue(0.00);
+                                errorFree = false;
+                            }
+                            if (windData[2].Value == null)
+                            {
+                                windData[2] = new JValue(0.00);
+                                errorFree = false;
+                            }
+                            if (windData[3].Value == null)
+                            {
+                                windData[3] = new JValue(0.00);
+                                errorFree = false;
+                            }
+                            if (windData[4].Value == null)
+                            {
+                                windData[4] = new JValue(0.00);
+                                errorFree = false;
+                            }
+                            if (windData[5].Value == null)
+                            {
+                                windData[5] = new JValue(0.00);
+                                errorFree = false;
+                            }
+                            if (windData[6].Value == null)
+                            {
+                                windData[6] = new JValue(0.00);
+                                errorFree = false;
+                            }
+
                             solarWind.MeasurementDateTime = Convert.ToDateTime(windData[0].ToString());
                             solarWind.XCoordinate = Convert.ToDecimal(windData[1].ToString());
                             solarWind.YCoordinate = Convert.ToDecimal(windData[2].ToString());
@@ -47,17 +91,21 @@ namespace Weather.SolarWindDataService
                             solarWind.Latitude = Convert.ToDecimal(windData[5].ToString());
                             solarWind.Temperature = Convert.ToDecimal(windData[6].ToString());
 
-                            try
+
+                            if (errorFree)
                             {
-                                connection.Insert(solarWind);
-                            }
-                            catch (SqlException sqlEx)
-                            {
-                                if (sqlEx.Message.StartsWith("Violation of UNIQUE KEY constraint"))
+                                try
                                 {
-                                    continue;
+                                    connection.Insert(solarWind);
                                 }
-                                throw;
+                                catch (SqlException sqlEx)
+                                {
+                                    if (sqlEx.Message.StartsWith("Violation of UNIQUE KEY constraint"))
+                                    {
+                                        continue;
+                                    }
+                                    throw;
+                                }
                             }
                         }
                     }
@@ -71,19 +119,4 @@ namespace Weather.SolarWindDataService
             }
         }
     }
-    //webClient.DownloadFile("http://services.swpc.noaa.gov/products/solar-wind/mag-5-minute.json", @"C:\Users\u872059\Downloads\SolarWind.json");
-
-    //Console.WriteLine(a[0]);
-    //Console.WriteLine(solarWindDataArray[1]);
-    //Console.WriteLine(solarWindDataArray[2]);
-    //Console.WriteLine("------------------------------------");
-    //Console.WriteLine(windData[0]);
-    //Console.WriteLine(windData[1]);
-    //Console.WriteLine(windData[2]);
-    //Console.WriteLine(windData[3]);
-    //Console.WriteLine(windData[4]);
-    //Console.WriteLine(windData[5]);
-    //Console.WriteLine(windData[6]);
-    //Console.WriteLine("------------------------------------");
-    //Console.ReadLine();
 }
