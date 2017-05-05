@@ -48,9 +48,9 @@ namespace Weather.Query
                             , CreationDateTime
                        FROM WeatherDataService  
                       WHERE ABS(DATEDIFF('n', MeasurementDateTime, @WhenParameter)) <=5
-                        AND Latitude  = @LatitudeParameter 
-                        AND Longitude = @LongitudeParameter", sqlParameters);
-                
+                        AND (SQUARE(Latitude - @LatitudeParameter)  +
+                             SQUARE(Longitude -@LongitudeParameter)) <= 1", sqlParameters);
+
 
                 conditionreport.Weather = weather;
 
