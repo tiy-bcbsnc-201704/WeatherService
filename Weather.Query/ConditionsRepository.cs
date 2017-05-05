@@ -53,9 +53,9 @@ namespace Weather.Query
                             , Humidity
                             , CreationDateTime
                        FROM WeatherDataService  
-                      WHERE ABS(DATEDIFF(n, MeasurementDateTime, @WhenParameter)) <=5
+                      WHERE ABS(DATEDIFF(n, ObservationTime, @WhenParameter)) <=5
                         AND (SQUARE(Latitude - @LatitudeParameter)  +
-                             SQUARE(Longitude -@LongitudeParameter)) <= 1", sqlParameters);
+                             SQUARE(Longitude - @LongitudeParameter)) <= 1", sqlParameters);
 
 
                 conditionreport.Weather = weather;
@@ -86,10 +86,10 @@ namespace Weather.Query
                             , EventsReviewed
                             , LocationSource
                             , MagnitudeSource
-                        FROM WeatherDataService 
-                       WHERE ABS(DATEDIFF(n, MeasurementDateTime, @WhenParameter)) <=5  
+                        FROM Earthquake 
+                       WHERE ABS(DATEDIFF(n, EventTime, @WhenParameter)) <=5  
                          AND (SQUARE(Latitude - @LatitudeParameter)  +
-                             SQUARE(Longitude -@LongitudeParameter)) <= 1", sqlParameters);
+                             SQUARE(Longitude - @LongitudeParameter)) <= 1", sqlParameters);
 
                 conditionreport.Earthquakes = earthQuake;
             }

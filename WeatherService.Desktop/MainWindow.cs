@@ -98,7 +98,7 @@ namespace WeatherService.Desktop
             }
             buffer.Append("</tbody></table>");
             buffer.Append("</body></html>");
-            _htmlLogViewer.DocumentText = buffer.ToString();
+            _searchResults.DocumentText = buffer.ToString();
         }
 
         private readonly WeatherDataSummary _summary;
