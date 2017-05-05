@@ -39,10 +39,37 @@ namespace Weather.EarthquakeDataService
                     {
                         SetFields setFields = new SetFields();
                         Earthquake earthquake = setFields.SetField(parts);
-                        InsertEarthQuack insertEarthQuack = new InsertEarthQuack();
-                        insertEarthQuack.InsertEarthQuackM(earthquake,_connectionString);
+
+                        networkIdentifier = parts[11];
+                        if (Count() == 0)
+                        {
+                            InsertEarthQuack insertEarthQuack = new InsertEarthQuack();
+                            insertEarthQuack.InsertEarthQuackM(earthquake, _connectionString);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Record Exists in DataBase & Skiping for process : " + networkIdentifier);
+                        }
+
                     }
                 }
+            }
+        }
+
+        public int Count()
+        {
+            using (SqlConnection connection = new SqlConnection(_connectionString))
+            {
+                connection.Open();
+                SqlCommand command = connection.CreateCommand();
+                command.CommandText = @"
+                SELECT count(*)
+                    FROM Earthquake 
+                    Where NetworkIdentifier = @networkIdentifier";
+#pragma warning disable CS0618 // Type or member is obsolete
+                command.Parameters.Add("@networkIdentifier", networkIdentifier);
+#pragma warning restore CS0618 // Type or member is obsolete
+                return (int)command.ExecuteScalar();
             }
         }
 
@@ -52,5 +79,6 @@ namespace Weather.EarthquakeDataService
         public static string desktoppath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
         public static string filename = "Earthquake.csv";
         public static string fileFullPath = Path.Combine(desktoppath, filename);
+        public static string networkIdentifier;
     }
 }
