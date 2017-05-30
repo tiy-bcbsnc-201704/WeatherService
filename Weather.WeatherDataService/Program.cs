@@ -169,17 +169,7 @@ namespace Weather.WeatherDataService
                         connection.Insert(WeatherDataService);
                     }
                 }
-                catch (SqlException sqlEx)
-                {
-                    if (sqlEx.Message.StartsWith("Violation of UNIQUE KEY constraint"))
-                    {
-                        logger.Record(ServiceName.SolarWindService, $"Skipping record that already exists in database.");
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
+                catch (SqlException) {}
 
                 break;
 

@@ -61,7 +61,7 @@ CREATE TABLE WeatherDataService
 	Humidity INT,
 	CreationDateTime DATETIME 	
 )
-CREATE UNIQUE INDEX AK_WeatherDataService_Location_Latitude_ObservationTime ON WeatherDataService (Location, Latitude, ObservationTime);
+CREATE UNIQUE INDEX AK_WeatherDataService_Location_Latitude_ObservationTime ON WeatherDataService (Latitude, Longitude, ObservationTime);
 
 CREATE TABLE ServiceEvents (
 	EventId INT PRIMARY KEY IDENTITY (1,1) NOT NULL,

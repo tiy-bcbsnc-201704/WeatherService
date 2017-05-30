@@ -53,7 +53,7 @@ namespace Weather.Query
                             , Humidity
                             , CreationDateTime
                        FROM WeatherDataService  
-                      WHERE ABS(DATEDIFF(n, CreationDateTime, @WhenParameter)) <=5
+                      WHERE ABS(DATEDIFF(hh, ObservationTime, @WhenParameter)) <=1
                         AND (SQUARE(Latitude - @LatitudeParameter)  +
                              SQUARE(Longitude - @LongitudeParameter)) <= 1", sqlParameters);
 
