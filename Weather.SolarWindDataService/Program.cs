@@ -17,6 +17,10 @@ namespace Weather.SolarWindDataService
             string connectionString;
             connectionString = ConfigurationManager.ConnectionStrings["SolarWindDataServices"].ConnectionString;
 
+            EventNotifier.EventHandler log = new EventNotifier.EventHandler(connectionString);
+            log.Record(ServiceName.SolarWindService, "Started");
+            log.Record(ServiceName.SolarWindService, "Will refresh every 1 minute.");
+
             while (true)
             {
                 using (WebClient webClient = new WebClient())
@@ -102,6 +106,7 @@ namespace Weather.SolarWindDataService
                                 {
                                     if (sqlEx.Message.StartsWith("Violation of UNIQUE KEY constraint"))
                                     {
+                                        log.Record(ServiceName.SolarWindService, $"Skipping record for {solarWind.MeasurementDateTime.ToString("yyyy-MM-dd hh:mm:ss")}");
                                         continue;
                                     }
                                     throw;
@@ -111,8 +116,7 @@ namespace Weather.SolarWindDataService
                     }
 
                     // Call the EventNotifier service to record the time the file was downloaded
-                    EventNotifier.EventHandler eh = new EventNotifier.EventHandler(connectionString);
-                    eh.Record(ServiceName.SolarWindService, "SolarWind table successfully updated");
+                    log.Record(ServiceName.SolarWindService, "SolarWind table successfully updated");
 
                     Thread.Sleep(60000); // 60000 = 60 seconds
                 }

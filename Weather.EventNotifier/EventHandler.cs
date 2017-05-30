@@ -1,10 +1,6 @@
 ﻿using Dapper.Contrib.Extensions;
 using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Weather.EventNotifier
 {
@@ -25,6 +21,8 @@ namespace Weather.EventNotifier
                 theThingThatJustHappened.EventDateTime = DateTime.Now;
 
                 connection.Insert(theThingThatJustHappened);
+
+                Console.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss")}: {message}");
             }
         }
 

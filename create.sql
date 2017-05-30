@@ -38,14 +38,14 @@ CREATE TABLE Earthquake
 
 CREATE TABLE SolarWind
 (
-SolarWindId INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
-MeasurementDateTime DATETIME UNIQUE NOT NULL,
-XCoordinate DECIMAL(5,2) NOT NULL,
-YCoordinate DECIMAL(5,2) NOT NULL,
-ZCoordinate DECIMAL(5,2) NOT NULL,
-Longitude DECIMAL(5,2) NOT NULL,
-Latitude DECIMAL(5,2) NOT NULL,
-Temperature DECIMAL(5,2) NOT NULL
+	SolarWindId INT IDENTITY(1,1) PRIMARY KEY NOT NULL,
+	MeasurementDateTime DATETIME UNIQUE NOT NULL,
+	XCoordinate DECIMAL(5,2) NOT NULL,
+	YCoordinate DECIMAL(5,2) NOT NULL,
+	ZCoordinate DECIMAL(5,2) NOT NULL,
+	Longitude DECIMAL(5,2) NOT NULL,
+	Latitude DECIMAL(5,2) NOT NULL,
+	Temperature DECIMAL(5,2) NOT NULL
 )
 
 CREATE TABLE WeatherDataService
@@ -60,22 +60,22 @@ CREATE TABLE WeatherDataService
 	Temperature DECIMAL(4,1),
 	Humidity INT,
 	CreationDateTime DATETIME 	
-  
-    )
+)
+CREATE UNIQUE INDEX AK_WeatherDataService_Location_Latitude_ObservationTime ON WeatherDataService (Location, Latitude, ObservationTime);
 
 CREATE TABLE ServiceEvents (
-EventId INT PRIMARY KEY IDENTITY (1,1) NOT NULL,
-ServiceName NVARCHAR(100) NOT NULL,
-EventDescription NVARCHAR(200) NOT NULL,
-EventDateTime DATETIME NOT NULL,
+	EventId INT PRIMARY KEY IDENTITY (1,1) NOT NULL,
+	ServiceName NVARCHAR(100) NOT NULL,
+	EventDescription NVARCHAR(200) NOT NULL,
+	EventDateTime DATETIME NOT NULL,
 )
 
-create  table LongLatLocs 
+create table LongLatLocs 
 (
-     rowId   int identity(1,1) primary key not null,
-     StateCode char(2) not null,
-     Latitude decimal(5,2) not null,
-     Longitude decimal(5,2) not null
+	rowId   int identity(1,1) primary key not null,
+	StateCode char(2) not null,
+	Latitude decimal(5,2) not null,
+	Longitude decimal(5,2) not null
 )
 
 

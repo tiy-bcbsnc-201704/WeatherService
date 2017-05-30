@@ -9,6 +9,11 @@ namespace Weather.EarthquakeDataService
 {
     public class RunEarthQuake
     {
+        public RunEarthQuake(IRecordAnEvent logger)
+        {
+            _logger = logger;
+        }
+
         public void DoStuff(string connectionString, string earthquackFileName)
         {
             _connectionString = connectionString;
@@ -16,18 +21,17 @@ namespace Weather.EarthquakeDataService
 
             FileDownloadUrl();
 
-            EventNotifier.EventHandler eh = new EventNotifier.EventHandler(_connectionString);
-            eh.Record(ServiceName.EarthquakeService, "Earthquake table successfully updated");
+            _logger.Record(ServiceName.EarthquakeService, "Earthquake table successfully updated");
             ReadEarthQuack();
 
-            Console.WriteLine("Database Update Completed with Downloaded File");
+            _logger.Record(ServiceName.EarthquakeService, "Database update completed.");
         }
 
-        public static void FileDownloadUrl()
+        public void FileDownloadUrl()
         {
             string url = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_hour.csv";
             int timeoutInMilliSec = 1000;
-            var success = FileDownloader.DownloadFile(url, fileFullPath, timeoutInMilliSec);
+            var success = FileDownloader.DownloadFile(url, fileFullPath, timeoutInMilliSec, _logger);
         }
 
         public void ReadEarthQuack()
@@ -50,7 +54,7 @@ namespace Weather.EarthquakeDataService
                         }
                         else
                         {
-                            Console.WriteLine("Record Exist in DataBase & Skiping for process : " + networkIdentifier);
+                            _logger.Record(ServiceName.EarthquakeService, $"Found existing record: {networkIdentifier}");
                         }
                     }
                 }
@@ -81,5 +85,6 @@ namespace Weather.EarthquakeDataService
         public static string filename = "Earthquake.csv";
         public static string fileFullPath = Path.Combine(desktoppath, filename);
         public static string networkIdentifier;
+        private readonly IRecordAnEvent _logger;
     }
 }

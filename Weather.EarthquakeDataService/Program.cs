@@ -1,6 +1,6 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Configuration;
+using Weather.EventNotifier;
 
 namespace Weather.EarthquakeDataService
 {
@@ -10,22 +10,17 @@ namespace Weather.EarthquakeDataService
         {
             string connectionString = ConfigurationManager.ConnectionStrings["WeatherService"].ConnectionString;
             string earthquackFileName = ConfigurationManager.AppSettings["EarthquackFileName"];
+            IRecordAnEvent log = new EventHandler(connectionString);
+            log.Record(ServiceName.EarthquakeService, "Started");
+            log.Record(ServiceName.EarthquakeService, "Will refresh every 5 minutes.");
 
             for (;;)
             {
-                RunEarthQuake runEarthQuake = new RunEarthQuake();
+                RunEarthQuake runEarthQuake = new RunEarthQuake(log);
                 runEarthQuake.DoStuff(connectionString, earthquackFileName);
-                Console.WriteLine("This process runs for every 5 minutes ...");
                 Thread.Sleep(1000 * 60 * 5);
-                Console.WriteLine("wait Time-End");
             }
         }
-
-        private static void SomeAction()
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }
 
